@@ -4,389 +4,555 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>世界観ポートフォリオ | aiuego</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;600;700;900&family=Noto+Serif+JP:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Work+Sans:wght@300;400;500;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600;700;900&family=Noto+Serif+JP:wght@200;300;400&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Work+Sans:wght@200;300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body { overflow-x: hidden; }
+    body { overflow-x: hidden; background: #0A0A0A; }
     img { display: block; max-width: 100%; }
+
+    :root {
+      --corp-bg:    #0B1A32;
+      --corp-gold:  #C5A34A;
+      --fit-red:    #E83A1E;
+      --wafuu-bg:   #F4EEE4;
+      --wafuu-green:#5C7830;
+      --wafuu-dark: #2C2420;
+    }
+
+    /* ===== REVEAL ===== */
+    .reveal {
+      opacity: 0;
+      transition: opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1);
+    }
+    .reveal.up    { transform: translateY(44px); }
+    .reveal.left  { transform: translateX(-44px); }
+    .reveal.right { transform: translateX(44px); }
+    .reveal.scale { transform: scale(0.93); }
+    .reveal.visible { opacity: 1; transform: none; }
+    .d1 { transition-delay: .12s; }
+    .d2 { transition-delay: .26s; }
+    .d3 { transition-delay: .4s; }
+    .d4 { transition-delay: .54s; }
 
     /* ===== BACK BUTTON ===== */
     .back-btn {
-      position: fixed; bottom: 28px; left: 28px; z-index: 9999;
-      background: rgba(0,0,0,0.72); color: #fff;
-      padding: 10px 20px; border-radius: 100px;
-      font-size: 0.74rem; font-family: 'Montserrat', sans-serif;
-      text-decoration: none; letter-spacing: 0.08em;
-      backdrop-filter: blur(8px);
-      transition: background 0.2s;
+      position: fixed; bottom: 24px; left: 24px; z-index: 9999;
+      background: rgba(0,0,0,.68); color: #fff;
+      padding: 9px 20px; border-radius: 100px;
+      font: 500 .72rem/1 'Montserrat', sans-serif;
+      text-decoration: none; letter-spacing: .08em;
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.08);
+      transition: background .2s, border-color .2s;
     }
-    .back-btn:hover { background: rgba(0,0,0,0.92); }
+    .back-btn:hover { background: rgba(0,0,0,.9); border-color: rgba(255,255,255,.22); }
 
-    /* ===== SIDE NAV DOTS ===== */
+    /* ===== SIDE NAV ===== */
     .side-nav {
-      position: fixed; right: 22px; top: 50%; transform: translateY(-50%);
-      z-index: 1000;
-      display: flex; flex-direction: column; gap: 12px; align-items: center;
+      position: fixed; right: 20px; top: 50%; transform: translateY(-50%);
+      z-index: 1000; display: flex; flex-direction: column; gap: 11px;
     }
     .side-dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      cursor: pointer; border: none; padding: 0;
-      transition: all 0.3s;
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.25);
+      width: 6px; height: 6px; border-radius: 50%; cursor: pointer;
+      border: none; padding: 0; background: rgba(255,255,255,.2);
+      transition: all .35s ease;
     }
-    .side-dot[data-s="intro"]     { background: rgba(180,180,180,0.4); }
-    .side-dot[data-s="corporate"] { background: rgba(212,175,55,0.4); }
-    .side-dot[data-s="creator"]   { background: rgba(155,89,182,0.4); }
-    .side-dot[data-s="fire"]      { background: rgba(255,87,51,0.4); }
-    .side-dot[data-s="wafuu"]     { background: rgba(122,144,51,0.4); }
-    .side-dot.active              { width: 10px; height: 10px; }
-    .side-dot[data-s="intro"].active     { background: #ccc; }
-    .side-dot[data-s="corporate"].active { background: #D4AF37; }
-    .side-dot[data-s="creator"].active   { background: #9B59B6; }
-    .side-dot[data-s="fire"].active      { background: #FF5733; }
-    .side-dot[data-s="wafuu"].active     { background: #7A9033; }
+    .side-dot.active { width: 9px; height: 9px; background: #fff; }
     @media (max-width: 768px) { .side-nav { display: none; } }
 
-    /* ===== SECTION LABEL ===== */
-    .section-label {
-      display: inline-block;
-      padding: 5px 14px;
-      font-size: 0.66rem; letter-spacing: 0.22em;
-      text-transform: uppercase; margin-bottom: 52px;
+    /* ===== MARQUEE ===== */
+    .m-band { overflow: hidden; white-space: nowrap; padding: 13px 0; position: relative; z-index: 10; }
+    .m-band--gold  { background: var(--corp-gold); }
+    .m-band--coal  { background: #141414; border-top: 1px solid #1d1d1d; border-bottom: 1px solid #1d1d1d; }
+    .m-band--red   { background: var(--fit-red); padding: 16px 0; }
+    .m-band--green { background: var(--wafuu-green); }
+    .m-inner { display: inline-block; animation: ticker 26s linear infinite; }
+    .m-band--gold  .m-inner { animation-duration: 20s; }
+    .m-band--red   .m-inner { animation-duration: 16s; }
+    .m-band--green .m-inner { animation-duration: 34s; }
+    @keyframes ticker { to { transform: translateX(-50%); } }
+    .m-text {
+      display: inline-block; padding: 0 38px;
+      font: 700 .64rem/1 'Montserrat', sans-serif;
+      letter-spacing: .38em; text-transform: uppercase;
     }
+    .m-band--gold  .m-text { color: var(--corp-bg); }
+    .m-band--coal  .m-text { color: rgba(255,255,255,.22); }
+    .m-band--red   .m-text { color: rgba(255,255,255,.9); }
+    .m-band--red   .m-text.dim { color: rgba(255,255,255,.35); }
+    .m-band--green .m-text { color: rgba(255,255,255,.78); }
 
-    /* ============================================================ */
-    /* INTRO                                                         */
-    /* ============================================================ */
+    /* ================================================================== */
+    /*  INTRO                                                               */
+    /* ================================================================== */
     #intro {
-      min-height: 100vh; background: #0A0A0A;
+      min-height: 100vh; background: #080808;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
       text-align: center; padding: 48px 24px;
       position: relative; overflow: hidden;
     }
     #intro::before {
-      content: ''; position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 50% 40%, rgba(100,100,120,0.15) 0%, transparent 65%);
-      pointer-events: none;
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+      background-size: 72px 72px;
     }
     .intro-eyebrow {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.68rem; letter-spacing: 0.45em;
-      color: rgba(255,255,255,0.35); margin-bottom: 28px;
-      text-transform: uppercase;
+      font: 400 .64rem/1 'Montserrat', sans-serif;
+      letter-spacing: .52em; color: rgba(255,255,255,.24);
+      text-transform: uppercase; margin-bottom: 22px;
     }
     .intro-title {
-      font-family: 'Lora', serif;
-      font-size: clamp(2.4rem, 6vw, 4rem);
-      color: #fff; line-height: 1.25; margin-bottom: 20px;
+      font: 400 clamp(2.8rem,7vw,5rem)/1.18 'Lora', serif;
+      color: #fff; margin-bottom: 18px;
     }
     .intro-sub {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.88rem; color: rgba(255,255,255,0.42);
-      line-height: 1.9; max-width: 420px; margin-bottom: 48px;
+      font: 300 .85rem/2 'Montserrat', sans-serif;
+      color: rgba(255,255,255,.32); margin-bottom: 56px; max-width: 360px;
     }
-    .intro-chips {
-      display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
-      margin-bottom: 56px;
+    .intro-index { border: 1px solid rgba(255,255,255,.07); }
+    .intro-idx-item {
+      display: block; padding: 15px 52px; cursor: pointer;
+      font: 500 .7rem/1 'Montserrat', sans-serif;
+      letter-spacing: .22em; text-transform: uppercase;
+      color: rgba(255,255,255,.28); text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+      transition: color .2s, background .2s;
     }
-    .intro-chip {
-      padding: 5px 14px;
-      border: 1px solid rgba(255,255,255,0.12);
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.68rem; letter-spacing: 0.1em;
-      color: rgba(255,255,255,0.35);
-    }
+    .intro-idx-item:last-child { border-bottom: none; }
+    .intro-idx-item:hover { color: #fff; background: rgba(255,255,255,.04); }
+    .intro-idx-num { display: inline-block; width: 28px; color: rgba(255,255,255,.15); font-size: .6rem; }
     .intro-scroll {
-      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
-      display: flex; flex-direction: column; align-items: center; gap: 8px;
-      color: rgba(255,255,255,0.25);
-      font-family: 'Montserrat', sans-serif;
-      font-size: 0.62rem; letter-spacing: 0.35em;
-      animation: bob 2.2s ease-in-out infinite;
+      position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+      font: 400 .6rem/1 'Montserrat', sans-serif; letter-spacing: .42em;
+      color: rgba(255,255,255,.16); text-transform: uppercase;
+      animation: bob 2.4s ease-in-out infinite;
     }
     @keyframes bob {
-      0%,100% { transform: translateX(-50%) translateY(0); opacity:.3; }
-      50%      { transform: translateX(-50%) translateY(7px); opacity:.7; }
+      0%,100% { transform: translateX(-50%) translateY(0);  opacity: .28; }
+      50%      { transform: translateX(-50%) translateY(9px); opacity: .65; }
     }
 
-    /* ============================================================ */
-    /* SECTION 1 — CORPORATE  Navy × Gold                           */
-    /* ============================================================ */
-    #corporate {
-      background: #001F5C; color: #fff;
-      padding: 96px 64px 80px;
-      font-family: 'Montserrat', sans-serif;
-    }
-    .s1-label {
-      border: 1px solid rgba(212,175,55,0.35);
-      color: rgba(212,175,55,0.75);
-    }
-    .s1-header {
-      display: grid; grid-template-columns: auto 1fr; gap: 48px;
-      align-items: end; margin-bottom: 48px;
-    }
-    .s1-brand {
-      font-family: 'Lora', serif;
-      font-size: clamp(2rem, 4vw, 3rem);
-      line-height: 1.2; color: #fff;
-    }
-    .s1-brand em { font-style: normal; color: #D4AF37; }
-    .s1-tagline {
-      font-size: 0.82rem; color: rgba(255,255,255,0.45);
-      line-height: 1.9; max-width: 340px;
-    }
-    /* 2-col image grid: left tall, right 2 stacked */
-    .s1-grid {
-      display: grid;
-      grid-template-columns: 1.35fr 1fr;
-      grid-template-rows: 310px 210px;
-      gap: 3px;
-    }
-    .s1-main { grid-row: span 2; overflow: hidden; }
-    .s1-cell { overflow: hidden; }
-    .s1-img {
-      width: 100%; height: 100%; object-fit: cover;
-      filter: brightness(0.82) saturate(0.85);
-      transition: filter 0.5s, transform 0.6s;
-    }
-    .s1-main:hover .s1-img,
-    .s1-cell:hover .s1-img { filter: brightness(0.95) saturate(1); transform: scale(1.04); }
-    .s1-meta {
-      display: flex; gap: 40px;
-      border-top: 1px solid rgba(212,175,55,0.2);
-      padding-top: 28px; margin-top: 36px;
-    }
-    .s1-meta-label { font-size: 0.66rem; letter-spacing: 0.18em; color: #D4AF37; margin-bottom: 3px; }
-    .s1-meta-val   { font-size: 1.3rem; font-weight: 700; }
+    /* ================================================================== */
+    /*  CORPORATE                                                           */
+    /* ================================================================== */
+    #corporate { background: var(--corp-bg); }
 
-    @media (max-width: 900px) {
-      #corporate { padding: 64px 28px 60px; }
-      .s1-header { grid-template-columns: 1fr; gap: 16px; }
-      .s1-grid { grid-template-columns: 1fr; grid-template-rows: 220px 160px 160px; }
-      .s1-main { grid-row: span 1; }
+    /* — Hero — */
+    .corp-hero {
+      position: relative; height: 100vh; overflow: hidden;
+      display: flex; align-items: flex-end;
     }
-
-    /* ============================================================ */
-    /* SECTION 2 — CREATOR  Near-black × Cream × Purple             */
-    /* ============================================================ */
-    #creator {
-      background: #0D0D0D; color: #F5F5F5;
-      padding: 96px 64px 80px;
+    .corp-hero-bg {
+      position: absolute; inset: 0; will-change: transform;
     }
-    .s2-label {
-      font-family: 'Work Sans', sans-serif;
-      border: 1px solid rgba(155,89,182,0.3);
-      color: rgba(195,155,211,0.8);
+    .corp-hero-bg img {
+      width: 100%; height: 115%; object-fit: cover;
+      filter: brightness(.36) saturate(.6);
     }
-    .s2-brand {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(3.5rem, 9vw, 7rem);
-      color: #F5F5F5; line-height: 0.88; margin-bottom: 12px;
+    .corp-hero-bg::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to bottom, transparent 38%, rgba(11,26,50,.92) 100%);
     }
-    .s2-brand em { font-style: italic; color: #E8D4B8; }
-    .s2-byline {
-      font-family: 'Work Sans', sans-serif;
-      font-size: 0.8rem; letter-spacing: 0.2em;
-      color: rgba(245,245,245,0.35); margin-bottom: 52px;
-    }
-    /* editorial grid: left portrait, right 2 stacked landscape */
-    .s2-grid {
-      display: grid;
-      grid-template-columns: 1fr 1.55fr;
-      grid-template-rows: 520px;
-      gap: 3px;
-    }
-    .s2-left { overflow: hidden; }
-    .s2-right {
-      display: grid; grid-template-rows: 1fr 1fr; gap: 3px;
-    }
-    .s2-right-cell { overflow: hidden; }
-    .s2-img {
-      width: 100%; height: 100%; object-fit: cover;
-      filter: grayscale(18%) brightness(0.82);
-      transition: filter 0.55s, transform 0.65s;
-    }
-    .s2-left:hover .s2-img,
-    .s2-right-cell:hover .s2-img { filter: grayscale(0%) brightness(0.95); transform: scale(1.05); }
-    .s2-rule {
-      margin-top: 30px;
-      display: flex; align-items: center; gap: 18px;
-    }
-    .s2-rule-line { flex: 1; height: 1px; background: rgba(232,212,184,0.12); }
-    .s2-rule-text {
-      font-family: 'Playfair Display', serif;
-      font-style: italic; font-size: 0.88rem; color: #E8D4B8;
-      white-space: nowrap;
-    }
-
-    @media (max-width: 900px) {
-      #creator { padding: 64px 28px 60px; }
-      .s2-grid { grid-template-columns: 1fr; grid-template-rows: 240px; }
-      .s2-right { grid-template-columns: 1fr 1fr; grid-template-rows: 200px; }
-    }
-
-    /* ============================================================ */
-    /* SECTION 3 — FIRE  Dark × Orange × Gold                       */
-    /* ============================================================ */
-    #fire {
-      background: #111111; color: #fff;
-      padding: 96px 64px 80px;
-      font-family: 'Inter', sans-serif;
-      position: relative; overflow: hidden;
-    }
-    #fire::before {
-      content: ''; position: absolute;
-      top: -20%; right: -10%; width: 55%; height: 140%;
-      background: radial-gradient(ellipse at 60% 40%, rgba(255,87,51,0.09) 0%, transparent 65%);
-      pointer-events: none;
-    }
-    .s3-label {
-      font-family: 'Inter', sans-serif;
-      border: 1px solid rgba(255,87,51,0.35);
-      color: rgba(255,130,100,0.85);
-    }
-    .s3-brand {
-      font-family: 'Montserrat', sans-serif; font-weight: 900;
-      font-size: clamp(3.5rem, 11vw, 9rem);
-      line-height: 0.82; text-transform: uppercase; letter-spacing: -0.02em;
-      color: #fff; margin-bottom: 16px;
-    }
-    .s3-brand-accent { color: #FF5733; }
-    .s3-bar {
-      display: flex; align-items: center; gap: 16px; margin-bottom: 52px;
-    }
-    .s3-bar-line { width: 56px; height: 2px; background: #FF5733; flex-shrink: 0; }
-    .s3-bar-text {
-      font-size: 0.78rem; letter-spacing: 0.22em; text-transform: uppercase;
-      color: rgba(255,255,255,0.38);
-    }
-    /* wide + narrow grid */
-    .s3-grid {
-      display: grid;
-      grid-template-columns: 1.7fr 1fr;
-      gap: 3px;
-    }
-    .s3-cell { position: relative; overflow: hidden; }
-    .s3-img {
-      width: 100%; height: 360px; object-fit: cover;
-      filter: brightness(0.72) saturate(1.15);
-      transition: filter 0.45s, transform 0.6s;
-    }
-    .s3-cell:hover .s3-img { filter: brightness(0.88) saturate(1.35); transform: scale(1.04); }
-    .s3-img-tag {
-      position: absolute; bottom: 14px; left: 14px;
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 700; font-size: 0.68rem; letter-spacing: 0.2em;
-      text-transform: uppercase; color: #FF5733;
-    }
-    /* orange diagonal stripe decoration */
-    .s3-stripe {
-      position: absolute; top: 0; right: 0; bottom: 0; width: 4px;
-      background: linear-gradient(to bottom, #FF5733, #FFD700);
-    }
-    .s3-stats {
-      display: flex; margin-top: 36px;
-      border-top: 1px solid rgba(255,255,255,0.07);
-      padding-top: 28px;
-    }
-    .s3-stat { flex: 1; padding-right: 24px; border-right: 1px solid rgba(255,255,255,0.07); }
-    .s3-stat:last-child { border-right: none; padding-right: 0; padding-left: 24px; }
-    .s3-stat-num {
-      font-family: 'Montserrat', sans-serif; font-weight: 900;
-      font-size: 1.9rem; color: #FF5733; line-height: 1;
-    }
-    .s3-stat-lbl { font-size: 0.68rem; letter-spacing: 0.1em; color: rgba(255,255,255,0.35); margin-top: 4px; }
-
-    @media (max-width: 900px) {
-      #fire { padding: 64px 28px 60px; }
-      .s3-grid { grid-template-columns: 1fr; }
-      .s3-img { height: 220px; }
-      .s3-stats { flex-wrap: wrap; gap: 16px; }
-      .s3-stat { flex: 0 0 45%; border-right: none; padding: 0; }
-    }
-
-    /* ============================================================ */
-    /* SECTION 4 — WAFUU  Cream × Matcha × Sakura                   */
-    /* ============================================================ */
-    #wafuu {
-      background: #F5F0E8; color: #2C2C2C;
-      padding: 96px 64px 96px;
-    }
-    .s4-label {
-      font-family: 'Noto Serif JP', serif;
-      border: 1px solid rgba(122,144,51,0.35);
-      color: rgba(122,144,51,0.85);
-    }
-    .s4-header {
+    .corp-hero-content {
+      position: relative; z-index: 2;
+      width: 100%; padding: 0 72px 72px;
       display: flex; justify-content: space-between; align-items: flex-end;
-      margin-bottom: 52px; gap: 32px;
     }
-    .s4-brand {
-      font-family: 'Noto Serif JP', serif; font-weight: 300;
-      font-size: clamp(2.4rem, 5.5vw, 4.2rem);
-      color: #2C2C2C; letter-spacing: 0.18em; line-height: 1.15;
+    .corp-accent-bar { width: 2px; height: 68px; background: var(--corp-gold); margin-bottom: 26px; }
+    .corp-hero-title {
+      font: 400 clamp(2.8rem,6.5vw,5.2rem)/1.06 'Lora', serif;
+      color: #fff; letter-spacing: -.01em;
     }
-    .s4-brand small {
-      display: block; font-size: 0.38em;
-      letter-spacing: 0.35em; color: #7A9033; margin-top: 10px;
-      font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 400;
+    .corp-hero-title em { display: block; color: var(--corp-gold); font-style: italic; }
+    .corp-hero-tagline {
+      font: 300 .86rem/2 'Montserrat', sans-serif;
+      color: rgba(255,255,255,.5); margin-top: 20px; max-width: 340px;
+      padding-left: 18px; border-left: 1px solid rgba(197,163,74,.28);
     }
-    .s4-poem {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.05rem; font-style: italic;
-      color: rgba(44,44,44,0.5); line-height: 2.1;
-      text-align: right; max-width: 260px;
+    .corp-hero-right { text-align: right; }
+    .corp-hero-label {
+      display: block; font: 500 .6rem/1 'Montserrat', sans-serif;
+      letter-spacing: .36em; text-transform: uppercase;
+      color: rgba(197,163,74,.5); margin-bottom: 7px; margin-top: 14px;
     }
-    /* left tall + right 2 stacked */
-    .s4-grid {
-      display: grid;
-      grid-template-columns: 1fr 1.2fr;
-      grid-template-rows: 290px 200px;
-      gap: 3px;
+    .corp-hero-label:first-child { margin-top: 0; }
+    .corp-hero-val {
+      font: 400 .94rem/1 'Lora', serif; font-style: italic;
+      color: rgba(255,255,255,.35);
     }
-    .s4-main { grid-row: span 2; overflow: hidden; }
-    .s4-cell { overflow: hidden; }
-    .s4-img {
+
+    /* — Detail — */
+    .corp-detail {
+      background: var(--corp-bg); padding: 88px 72px 112px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+    }
+    .corp-pull {
+      font: 400 clamp(1.3rem,2.6vw,1.9rem)/1.65 'Lora', serif;
+      font-style: italic; color: #fff; margin-bottom: 52px;
+    }
+    .corp-pull em { color: var(--corp-gold); font-style: normal; }
+    .corp-metrics { display: flex; gap: 0; margin-bottom: 44px; }
+    .corp-metric { flex: 1; padding: 0 28px 0 0; border-right: 1px solid rgba(197,163,74,.1); }
+    .corp-metric:last-child { border-right: none; }
+    .corp-metric-n {
+      display: block; font: 700 2.1rem/1 'Montserrat', sans-serif;
+      color: var(--corp-gold);
+    }
+    .corp-metric-l {
+      display: block; margin-top: 5px;
+      font: 400 .6rem/1 'Montserrat', sans-serif;
+      letter-spacing: .18em; text-transform: uppercase; color: rgba(255,255,255,.26);
+    }
+    .corp-services {
+      font: 300 .76rem/2.5 'Montserrat', sans-serif;
+      color: rgba(255,255,255,.22); letter-spacing: .06em;
+      border-top: 1px solid rgba(197,163,74,.1); padding-top: 24px;
+    }
+    .corp-img-stack { position: relative; height: 480px; }
+    .corp-img-tall {
+      position: absolute; top: 0; right: 0;
+      width: calc(100% - 52px); height: 100%; overflow: hidden;
+    }
+    .corp-img-tall img { width: 100%; height: 100%; object-fit: cover; filter: brightness(.8) saturate(.78); }
+    .corp-img-sm {
+      position: absolute; bottom: 52px; left: 0;
+      width: 168px; height: 210px; overflow: hidden;
+      border: 4px solid var(--corp-bg);
+      box-shadow: 0 10px 40px rgba(0,0,0,.7);
+    }
+    .corp-img-sm img { width: 100%; height: 100%; object-fit: cover; filter: brightness(.84) saturate(.8); }
+
+    @media (max-width: 900px) {
+      .corp-hero-content { padding: 0 28px 52px; flex-direction: column; align-items: flex-start; gap: 20px; }
+      .corp-detail { grid-template-columns: 1fr; padding: 64px 28px; }
+      .corp-img-stack { height: 320px; }
+      .corp-img-sm { width: 130px; height: 160px; bottom: 32px; }
+    }
+
+    /* ================================================================== */
+    /*  CREATOR                                                             */
+    /* ================================================================== */
+    #creator { background: #0D0D0D; }
+
+    /* — Hero: hard split — */
+    .creator-hero {
+      display: grid; grid-template-columns: 1fr 55vw;
+      height: 100vh; overflow: hidden;
+    }
+    .creator-hero-text {
+      background: #0D0D0D;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 0 56px 68px;
+    }
+    .creator-tag {
+      font: 300 .62rem/1 'Work Sans', sans-serif;
+      letter-spacing: .4em; text-transform: uppercase;
+      color: rgba(255,255,255,.2); margin-bottom: 36px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .creator-tag::before {
+      content: ''; display: block; width: 32px; height: 1px; background: rgba(255,255,255,.14);
+      flex-shrink: 0;
+    }
+    .creator-hero-name {
+      font: 400 clamp(4rem,9vw,7.5rem)/.84 'Playfair Display', serif;
+      color: #fff; letter-spacing: -.02em; margin-bottom: 28px;
+    }
+    .creator-hero-name em {
+      display: block; font-style: italic; font-size: .5em;
+      color: #EAE3D8; letter-spacing: .01em; line-height: 1.6; margin-top: 10px;
+    }
+    .creator-hero-role {
+      font: 200 .86rem/1 'Work Sans', sans-serif;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: rgba(255,255,255,.28);
+      border-top: 1px solid rgba(255,255,255,.06); padding-top: 20px;
+    }
+    .creator-hero-img { overflow: hidden; position: relative; }
+    .creator-hero-img img {
       width: 100%; height: 100%; object-fit: cover;
-      filter: brightness(0.93) saturate(0.82);
-      transition: filter 0.5s, transform 0.65s;
+      filter: grayscale(12%) brightness(.72);
     }
-    .s4-main:hover .s4-img,
-    .s4-cell:hover .s4-img { filter: brightness(1) saturate(1); transform: scale(1.04); }
-    .s4-footer {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 32px;
-      border-top: 1px solid rgba(122,144,51,0.18);
-      padding-top: 28px; margin-top: 36px;
+    .creator-hero-img::before {
+      content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 3px;
+      background: linear-gradient(to bottom, transparent, #9B59B6 40%, transparent);
+      z-index: 2;
     }
-    .s4-kigo {
-      font-family: 'Cormorant Garamond', serif;
-      font-style: italic; font-size: 1rem;
-      color: rgba(44,44,44,0.4); line-height: 1.8;
+
+    /* — Detail: cream collage — */
+    .creator-detail { background: #EAE3D8; padding: 96px 72px 104px; }
+    .creator-detail-top {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 60px;
     }
-    .s4-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-    .s4-tag {
-      padding: 4px 12px;
-      border: 1px solid rgba(122,144,51,0.3);
-      font-family: 'Noto Serif JP', serif;
-      font-size: 0.7rem; color: #7A9033; letter-spacing: 0.05em;
+    .creator-detail-h {
+      font: 400 clamp(2rem,4vw,3rem)/1.22 'Playfair Display', serif;
+      font-style: italic; color: #111;
+    }
+    .creator-detail-desc {
+      font: 300 .85rem/2 'Work Sans', sans-serif;
+      color: rgba(0,0,0,.42); max-width: 280px; text-align: right;
+    }
+    .creator-collage { position: relative; height: 500px; margin-bottom: 0; }
+    .c-a {
+      position: absolute; top: 0; left: 0;
+      width: 54%; height: 86%; overflow: hidden;
+    }
+    .c-b {
+      position: absolute; top: 8%; right: 0;
+      width: 40%; height: 62%; overflow: hidden;
+      box-shadow: -6px 8px 36px rgba(0,0,0,.14);
+    }
+    .c-c {
+      position: absolute; bottom: 0; left: 38%;
+      width: 26%; height: 38%; overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,.1);
+    }
+    .c-a img, .c-b img, .c-c img { width: 100%; height: 100%; object-fit: cover; }
+    .creator-cap {
+      position: absolute;
+      font: 300 .8rem/1.8 'Playfair Display', serif; font-style: italic;
+      color: rgba(0,0,0,.3);
+    }
+    .creator-cap-a { top: 0; right: 42%; width: 180px; text-align: right; }
+    .creator-cap-b { bottom: 10%; left: 1%; }
+    .creator-rule {
+      display: flex; align-items: center; gap: 20px;
+      margin-top: 52px; border-top: 1px solid rgba(0,0,0,.08); padding-top: 28px;
+    }
+    .creator-rule-line { flex: 1; height: 1px; background: rgba(155,89,182,.18); }
+    .creator-rule-text {
+      font: 300 .76rem/1 'Work Sans', sans-serif;
+      letter-spacing: .2em; text-transform: uppercase; color: rgba(0,0,0,.32);
     }
 
     @media (max-width: 900px) {
-      #wafuu { padding: 64px 28px 80px; }
-      .s4-header { flex-direction: column; align-items: flex-start; gap: 16px; }
-      .s4-poem { text-align: left; }
-      .s4-grid { grid-template-columns: 1fr; grid-template-rows: 220px 160px 160px; }
-      .s4-main { grid-row: span 1; }
-      .s4-footer { flex-direction: column; align-items: flex-start; }
+      .creator-hero { grid-template-columns: 1fr; grid-template-rows: 48vh 52vh; }
+      .creator-hero-text { padding: 0 28px 36px; }
+      .creator-detail { padding: 64px 28px; }
+      .creator-detail-top { flex-direction: column; align-items: flex-start; gap: 14px; }
+      .creator-detail-desc { text-align: left; }
+      .creator-collage { height: 380px; }
+    }
+
+    /* ================================================================== */
+    /*  FITNESS / FIRE                                                      */
+    /* ================================================================== */
+    #fire { background: #0F0F0F; }
+
+    /* — Hero: giant outline text over full-bleed — */
+    .fit-hero {
+      position: relative; height: 100vh; overflow: hidden;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: flex-start;
+      padding: 0 72px;
+    }
+    .fit-hero-bg { position: absolute; inset: 0; will-change: transform; }
+    .fit-hero-bg img {
+      width: 100%; height: 115%; object-fit: cover;
+      filter: brightness(.32) saturate(.9);
+    }
+    .fit-hero-bg::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to right, rgba(15,15,15,.88) 30%, transparent 72%);
+    }
+    .fit-giant {
+      position: relative; z-index: 2;
+      font: 900 clamp(5rem,17vw,13rem)/.82 'Montserrat', sans-serif;
+      letter-spacing: -.03em; text-transform: uppercase;
+      color: transparent;
+      -webkit-text-stroke: 1.5px rgba(255,255,255,.16);
+      user-select: none;
+    }
+    .fit-giant-acc {
+      display: block; -webkit-text-stroke: 2px rgba(232,58,30,.7);
+    }
+    .fit-hero-body { position: relative; z-index: 2; margin-top: 36px; }
+    .fit-accent-line {
+      display: flex; align-items: center; gap: 16px; margin-bottom: 18px;
+    }
+    .fit-accent-bar { width: 48px; height: 2px; background: var(--fit-red); flex-shrink: 0; }
+    .fit-accent-text {
+      font: 400 .76rem/1 'Inter', sans-serif;
+      letter-spacing: .26em; text-transform: uppercase; color: rgba(255,255,255,.42);
+    }
+    .fit-hero-sub {
+      font: 300 clamp(.95rem,2vw,1.35rem)/1.55 'Inter', sans-serif;
+      color: #fff; max-width: 380px;
+    }
+    .fit-hero-sub strong { color: var(--fit-red); font-weight: 600; }
+
+    /* — Detail: white + edge-bleed strip — */
+    .fit-detail { background: #fff; overflow: hidden; }
+    .fit-strip {
+      display: grid; grid-template-columns: 1.8fr 1fr 1.2fr;
+      height: 320px; gap: 0;
+    }
+    .fit-strip-cell { overflow: hidden; position: relative; }
+    .fit-strip-cell img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(.76) saturate(1.1);
+      transition: filter .4s, transform .5s;
+    }
+    .fit-strip-cell:hover img { filter: brightness(.94) saturate(1.3); transform: scale(1.04); }
+    .fit-strip-tag {
+      position: absolute; bottom: 14px; left: 16px;
+      font: 700 .58rem/1 'Inter', sans-serif;
+      letter-spacing: .28em; text-transform: uppercase; color: var(--fit-red);
+    }
+    .fit-stats {
+      padding: 48px 72px 72px; display: flex; gap: 0;
+    }
+    .fit-stat {
+      flex: 1; padding: 0 36px 0 0;
+      border-right: 1px solid rgba(0,0,0,.07);
+    }
+    .fit-stat:last-child { border-right: none; }
+    .fit-stat-n {
+      display: block; font: 900 2.5rem/1 'Montserrat', sans-serif; color: var(--fit-red);
+    }
+    .fit-stat-l {
+      display: block; margin-top: 6px;
+      font: 400 .62rem/1 'Inter', sans-serif;
+      letter-spacing: .2em; text-transform: uppercase; color: rgba(0,0,0,.32);
+    }
+
+    @media (max-width: 900px) {
+      .fit-hero { padding: 0 28px; }
+      .fit-giant { font-size: clamp(4.5rem,19vw,8rem); }
+      .fit-strip { grid-template-columns: 1fr 1fr; height: 230px; }
+      .fit-strip-cell:last-child { display: none; }
+      .fit-stats { padding: 36px 28px 56px; flex-wrap: wrap; gap: 20px; }
+      .fit-stat { flex: 0 0 45%; border-right: none; padding: 0; }
+    }
+
+    /* ================================================================== */
+    /*  WAFUU                                                               */
+    /* ================================================================== */
+    #wafuu { background: var(--wafuu-bg); }
+
+    /* — Hero: zen centered narrow image — */
+    .wafuu-hero {
+      position: relative; height: 100vh; overflow: hidden;
+      background: var(--wafuu-bg);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .wafuu-hero-img {
+      position: absolute;
+      top: 6%; left: 50%; transform: translateX(-50%);
+      width: 50vw; max-width: 640px; height: 82%;
+      overflow: hidden;
+    }
+    .wafuu-hero-img img {
+      width: 100%; height: 115%; object-fit: cover;
+      filter: brightness(.88) saturate(.8);
+    }
+    .wafuu-tate {
+      position: absolute; right: 56px; top: 50%; transform: translateY(-50%);
+      writing-mode: vertical-rl; text-orientation: upright;
+      font: 200 .88rem/2 'Noto Serif JP', serif;
+      letter-spacing: .25em; color: rgba(44,36,32,.32); z-index: 2;
+    }
+    .wafuu-hero-brand {
+      position: absolute; left: 56px; bottom: 64px; z-index: 2;
+    }
+    .wafuu-hero-k {
+      font: 300 clamp(2rem,4.5vw,3.4rem)/1.28 'Noto Serif JP', serif;
+      color: var(--wafuu-dark); letter-spacing: .2em;
+    }
+    .wafuu-hero-roman {
+      display: block; margin-top: 10px;
+      font: 300 .86rem/1 'Cormorant Garamond', serif; font-style: italic;
+      color: var(--wafuu-green); letter-spacing: .2em;
+    }
+    .wafuu-hero-foot {
+      position: absolute; bottom: 68px; left: 50%; transform: translateX(-50%);
+      font: 300 .88rem/1 'Cormorant Garamond', serif; font-style: italic;
+      color: rgba(44,36,32,.3); white-space: nowrap; z-index: 2;
+    }
+
+    /* — Detail: mosaic collage — */
+    .wafuu-detail { background: var(--wafuu-bg); padding: 88px 72px 100px; }
+    .wafuu-detail-top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 56px;
+    }
+    .wafuu-detail-h {
+      font: 300 clamp(1.8rem,3.5vw,2.6rem)/1.5 'Cormorant Garamond', serif;
+      font-style: italic; color: var(--wafuu-dark);
+    }
+    .wafuu-haiku {
+      font: 200 .85rem/2.4 'Noto Serif JP', serif;
+      color: rgba(44,36,32,.42); text-align: right;
+      border-right: 2px solid rgba(92,120,48,.2); padding-right: 20px;
+    }
+    .wafuu-mosaic { position: relative; height: 500px; }
+    .w-a {
+      position: absolute; top: 0; left: 0;
+      width: 42%; height: 76%; overflow: hidden;
+    }
+    .w-b {
+      position: absolute; top: 0; right: 0;
+      width: 36%; height: 56%; overflow: hidden;
+    }
+    .w-c {
+      position: absolute; bottom: 0; left: 28%;
+      width: 44%; height: 50%; overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,.08);
+    }
+    .w-d {
+      position: absolute; bottom: 22%; right: 1%;
+      width: 24%; height: 36%; overflow: hidden;
+    }
+    .w-a img, .w-b img, .w-c img, .w-d img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(.91) saturate(.78);
+      transition: filter .55s, transform .65s;
+    }
+    .w-a:hover img,.w-b:hover img,.w-c:hover img,.w-d:hover img {
+      filter: brightness(1) saturate(1); transform: scale(1.04);
+    }
+    /* Matcha dot accent */
+    .wafuu-dots {
+      position: absolute; top: 31%; left: 43%; z-index: 2;
+      display: grid; grid-template-columns: repeat(3, 7px); gap: 5px;
+    }
+    .wafuu-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--wafuu-green); opacity: .35; }
+    .wafuu-mosaic-q {
+      position: absolute; bottom: 3%; left: 1%;
+      font: 300 .84rem/1.8 'Cormorant Garamond', serif; font-style: italic;
+      color: rgba(44,36,32,.32);
+    }
+    .wafuu-tags {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-top: 56px;
+      border-top: 1px solid rgba(92,120,48,.12); padding-top: 28px;
+    }
+    .wafuu-tag {
+      padding: 5px 14px; border: 1px solid rgba(92,120,48,.25);
+      font: 300 .7rem/1 'Noto Serif JP', serif;
+      color: var(--wafuu-green); letter-spacing: .06em;
+    }
+
+    @media (max-width: 900px) {
+      .wafuu-hero-img { width: 82vw; }
+      .wafuu-tate { right: 12px; font-size: .76rem; }
+      .wafuu-hero-brand { left: 20px; bottom: 44px; }
+      .wafuu-hero-foot { display: none; }
+      .wafuu-detail { padding: 64px 28px; }
+      .wafuu-detail-top { flex-direction: column; gap: 24px; }
+      .wafuu-haiku { text-align: left; border-right: none; border-left: 2px solid rgba(92,120,48,.2); padding-right: 0; padding-left: 16px; }
+      .wafuu-mosaic { height: 360px; }
+      .w-d { display: none; }
     }
   </style>
 </head>
 <body>
 
-  <a href="index.html" class="back-btn">← aiuego HP へ戻る</a>
+  <a href="index.html" class="back-btn">← aiuego HP</a>
 
   <nav class="side-nav" aria-label="セクション移動">
     <button class="side-dot active" data-s="intro"     onclick="go('intro')"     aria-label="はじめに"></button>
@@ -396,201 +562,369 @@
     <button class="side-dot"        data-s="wafuu"     onclick="go('wafuu')"     aria-label="和風"></button>
   </nav>
 
-  <!-- ================================================================ -->
-  <!-- INTRO                                                              -->
-  <!-- ================================================================ -->
+  <!-- ============================================================ -->
+  <!-- INTRO                                                         -->
+  <!-- ============================================================ -->
   <section id="intro">
-    <p class="intro-eyebrow">aiuego — Web制作</p>
-    <h1 class="intro-title">世界観<br>ポートフォリオ</h1>
-    <p class="intro-sub">4つの業界、4つのデザイン。<br>スクロールして「この感じ好き！」を見つけてください。</p>
-    <div class="intro-chips">
-      <span class="intro-chip">コーポレート</span>
-      <span class="intro-chip">クリエイター</span>
-      <span class="intro-chip">フィットネス</span>
-      <span class="intro-chip">和風・飲食</span>
-    </div>
-    <div class="intro-scroll">
-      <span>SCROLL</span>
-      <span>↓</span>
-    </div>
+    <p class="intro-eyebrow reveal up">aiuego — Web制作</p>
+    <h1 class="intro-title reveal up d1">世界観<br>ポートフォリオ</h1>
+    <p class="intro-sub reveal up d2">業種もスタイルも、全部ちがう。<br>4つの世界を覗いてください。</p>
+    <nav class="intro-index reveal up d3">
+      <a class="intro-idx-item" onclick="go('corporate')"><span class="intro-idx-num">01</span> 建築・コンサル</a>
+      <a class="intro-idx-item" onclick="go('creator')"><span class="intro-idx-num">02</span> クリエイター・写真</a>
+      <a class="intro-idx-item" onclick="go('fire')"><span class="intro-idx-num">03</span> フィットネス</a>
+      <a class="intro-idx-item" onclick="go('wafuu')"><span class="intro-idx-num">04</span> 和風・飲食</a>
+    </nav>
+    <p class="intro-scroll" aria-hidden="true">↓ scroll</p>
   </section>
 
-  <!-- ================================================================ -->
-  <!-- SECTION 1 — CORPORATE  Navy × Gold                                -->
-  <!-- ================================================================ -->
+  <!-- MARQUEE ① Gold -->
+  <div class="m-band m-band--gold" aria-hidden="true">
+    <div class="m-inner">
+      <span class="m-text">Corporate</span><span class="m-text">建築・コンサル</span>
+      <span class="m-text">Architecture</span><span class="m-text">Strategy</span>
+      <span class="m-text">Corporate</span><span class="m-text">建築・コンサル</span>
+      <span class="m-text">Architecture</span><span class="m-text">Strategy</span>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- CORPORATE  ①ヒーロー: 全面画像+テキストオーバーレイ         -->
+  <!--            ②ディテール: 引用+メトリクス+重ね画像            -->
+  <!-- ============================================================ -->
   <section id="corporate">
-    <span class="section-label s1-label">コーポレート / 士業・コンサル</span>
-    <div class="s1-header">
-      <h2 class="s1-brand">NEXUS<br><em>Advisory</em><br>Group</h2>
-      <p class="s1-tagline">経営の羅針盤。確かな戦略で、企業の未来を切り拓く。<br>誠実と信頼を軸に、クライアントと歩む専門家集団。</p>
-    </div>
-    <div class="s1-grid">
-      <div class="s1-main">
-        <img class="s1-img"
-          src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=900&q=80"
-          alt="コンサルティングの場" loading="lazy">
+    <div class="corp-hero">
+      <div class="corp-hero-bg">
+        <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1600&q=85"
+             alt="モダン建築ファサード" loading="eager">
       </div>
-      <div class="s1-cell">
-        <img class="s1-img"
-          src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=700&q=80"
-          alt="データ分析" loading="lazy">
-      </div>
-      <div class="s1-cell">
-        <img class="s1-img"
-          src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=700&q=80"
-          alt="チームミーティング" loading="lazy">
+      <div class="corp-hero-content">
+        <div class="corp-hero-left">
+          <div class="corp-accent-bar reveal left"></div>
+          <h2 class="corp-hero-title reveal left d1">NEXUS<br><em>Advisory</em></h2>
+          <p class="corp-hero-tagline reveal left d2">経営の羅針盤。確かな戦略で、<br>企業の未来を切り拓く。</p>
+        </div>
+        <div class="corp-hero-right reveal right d2">
+          <span class="corp-hero-label">Industry</span>
+          <p class="corp-hero-val">士業・コンサル・法人</p>
+          <span class="corp-hero-label">Style</span>
+          <p class="corp-hero-val">Navy × Gold</p>
+        </div>
       </div>
     </div>
-    <div class="s1-meta">
+
+    <div class="corp-detail">
       <div>
-        <p class="s1-meta-label">INDUSTRY</p>
-        <p class="s1-meta-val" style="font-size:0.95rem;font-weight:600;">士業・コンサル・法人</p>
+        <p class="corp-pull reveal up">"信頼は、<em>実績</em>が積み上げた<br>唯一の資産である。"</p>
+        <div class="corp-metrics reveal up d1">
+          <div class="corp-metric">
+            <span class="corp-metric-n" data-target="147" data-suffix="+">0+</span>
+            <span class="corp-metric-l">支援企業数</span>
+          </div>
+          <div class="corp-metric">
+            <span class="corp-metric-n" data-target="18" data-suffix="年">0年</span>
+            <span class="corp-metric-l">業界経験</span>
+          </div>
+          <div class="corp-metric">
+            <span class="corp-metric-n" data-target="96" data-suffix="%">0%</span>
+            <span class="corp-metric-l">顧客継続率</span>
+          </div>
+        </div>
+        <p class="corp-services reveal up d2">
+          M&amp;Aアドバイザリー　/　経営戦略立案<br>
+          組織改革支援　/　IPO・上場サポート<br>
+          財務デューデリジェンス　/　リスク管理
+        </p>
       </div>
-      <div>
-        <p class="s1-meta-label">STYLE</p>
-        <p class="s1-meta-val" style="font-size:0.95rem;font-weight:600;">Navy × Gold — 信頼・格調</p>
-      </div>
-      <div>
-        <p class="s1-meta-label">FONT</p>
-        <p class="s1-meta-val" style="font-size:0.95rem;font-weight:600;">Lora + Montserrat</p>
+      <div class="corp-img-stack reveal scale d1">
+        <div class="corp-img-tall">
+          <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80"
+               alt="モダンオフィス" loading="lazy">
+        </div>
+        <div class="corp-img-sm">
+          <img src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=600&q=80"
+               alt="チームミーティング" loading="lazy">
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ================================================================ -->
-  <!-- SECTION 2 — CREATOR  Near-black × Cream × Purple                 -->
-  <!-- ================================================================ -->
+  <!-- MARQUEE ② Dark (Creator) -->
+  <div class="m-band m-band--coal" aria-hidden="true">
+    <div class="m-inner">
+      <span class="m-text">Creator</span><span class="m-text">クリエイター</span>
+      <span class="m-text">Photographer</span><span class="m-text">Visual Artist</span>
+      <span class="m-text">Designer</span><span class="m-text">映像作家</span>
+      <span class="m-text">Creator</span><span class="m-text">クリエイター</span>
+      <span class="m-text">Photographer</span><span class="m-text">Visual Artist</span>
+      <span class="m-text">Designer</span><span class="m-text">映像作家</span>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- CREATOR  ①左黒テキスト×右全面写真 スプリット               -->
+  <!--          ②クリーム背景 コラージュ                           -->
+  <!-- ============================================================ -->
   <section id="creator">
-    <span class="section-label s2-label">クリエイター / 写真・アート・映像</span>
-    <h2 class="s2-brand">SOTA<br><em>Photography</em></h2>
-    <p class="s2-byline">Visual Storyteller · Tokyo · 2019–</p>
-    <div class="s2-grid">
-      <div class="s2-left">
-        <img class="s2-img"
-          src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=700&q=80"
-          alt="ポートレート撮影" loading="lazy">
+    <div class="creator-hero">
+      <div class="creator-hero-text">
+        <p class="creator-tag reveal">クリエイター / 写真家</p>
+        <h2 class="creator-hero-name reveal up d1">SOTA<em>Photography</em></h2>
+        <p class="creator-hero-role reveal up d2">Visual Storyteller · Tokyo · 2019–</p>
       </div>
-      <div class="s2-right">
-        <div class="s2-right-cell">
-          <img class="s2-img"
-            src="https://images.unsplash.com/photo-1500964757637-c85e8a162699?w=900&q=80"
-            alt="ドラマチックな風景" loading="lazy">
-        </div>
-        <div class="s2-right-cell">
-          <img class="s2-img"
-            src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=700&q=80"
-            alt="カメラ機材" loading="lazy">
-        </div>
+      <div class="creator-hero-img reveal scale d1">
+        <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=1000&q=80"
+             alt="ポートレート作品" loading="eager">
       </div>
     </div>
-    <div class="s2-rule">
-      <div class="s2-rule-line"></div>
-      <span class="s2-rule-text">Dark × Cream × Purple — 感性・表現・奥行き</span>
-      <div class="s2-rule-line"></div>
+
+    <div class="creator-detail">
+      <div class="creator-detail-top">
+        <h3 class="creator-detail-h reveal left">光と影の<br>ストーリーテリング</h3>
+        <p class="creator-detail-desc reveal right">感情を切り取り、物語を紡ぐ。<br>一枚の写真に、無限の世界観を。</p>
+      </div>
+      <div class="creator-collage reveal up d1">
+        <div class="c-a">
+          <img src="https://images.unsplash.com/photo-1500964757637-c85e8a162699?w=900&q=80"
+               alt="ドラマチック風景" loading="lazy">
+        </div>
+        <div class="c-b">
+          <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=700&q=80"
+               alt="カメラ機材" loading="lazy">
+        </div>
+        <div class="c-c">
+          <img src="https://images.unsplash.com/photo-1551843073-4a9a5b6fcd5f?w=600&q=80"
+               alt="モノクロ被写体" loading="lazy">
+        </div>
+        <p class="creator-cap creator-cap-a">"Light is the language<br>I speak most fluently."</p>
+        <p class="creator-cap creator-cap-b">Dark × Cream × Purple<br>感性・表現・奥行き</p>
+      </div>
+      <div class="creator-rule reveal up d2">
+        <div class="creator-rule-line"></div>
+        <span class="creator-rule-text">Playfair Display · Work Sans</span>
+        <div class="creator-rule-line"></div>
+      </div>
     </div>
   </section>
 
-  <!-- ================================================================ -->
-  <!-- SECTION 3 — FIRE  Dark × Orange × Gold                           -->
-  <!-- ================================================================ -->
+  <!-- MARQUEE ③ Red (Fitness) -->
+  <div class="m-band m-band--red" aria-hidden="true">
+    <div class="m-inner">
+      <span class="m-text">FITNESS</span><span class="m-text dim">フィットネス</span>
+      <span class="m-text">BLAZE</span><span class="m-text dim">スポーツ</span>
+      <span class="m-text">PUSH&nbsp;LIMITS</span><span class="m-text dim">限界突破</span>
+      <span class="m-text">FITNESS</span><span class="m-text dim">フィットネス</span>
+      <span class="m-text">BLAZE</span><span class="m-text dim">スポーツ</span>
+      <span class="m-text">PUSH&nbsp;LIMITS</span><span class="m-text dim">限界突破</span>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- FITNESS  ①アウトライン巨大文字×全面写真                    -->
+  <!--          ②白背景 端まで伸びる写真ストリップ+スタッツ        -->
+  <!-- ============================================================ -->
   <section id="fire">
-    <span class="section-label s3-label">フィットネス / スポーツ・エネルギー</span>
-    <h2 class="s3-brand">BLAZE<br><span class="s3-brand-accent">FITNESS</span></h2>
-    <div class="s3-bar">
-      <div class="s3-bar-line"></div>
-      <p class="s3-bar-text">限界を超えろ。自分を燃やせ。</p>
+    <div class="fit-hero">
+      <div class="fit-hero-bg">
+        <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&q=85"
+             alt="ジムトレーニングフロア" loading="eager">
+      </div>
+      <h2 class="fit-giant reveal up">
+        BLAZE
+        <span class="fit-giant-acc">FITNESS</span>
+      </h2>
+      <div class="fit-hero-body">
+        <div class="fit-accent-line">
+          <div class="fit-accent-bar"></div>
+          <span class="fit-accent-text">Push beyond limits</span>
+        </div>
+        <p class="fit-hero-sub reveal up d1">
+          限界を超えろ。<strong>自分を燃やせ。</strong><br>
+          最強の自分に、今日なる。
+        </p>
+      </div>
     </div>
-    <div class="s3-grid">
-      <div class="s3-cell">
-        <img class="s3-img"
-          src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1000&q=80"
-          alt="ジムトレーニングフロア" loading="lazy">
-        <span class="s3-img-tag">Training Floor</span>
-        <div class="s3-stripe"></div>
+
+    <div class="fit-detail">
+      <div class="fit-strip reveal scale">
+        <div class="fit-strip-cell">
+          <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=900&q=80"
+               alt="ウェイトトレーニング" loading="lazy">
+          <span class="fit-strip-tag">Push Limits</span>
+        </div>
+        <div class="fit-strip-cell">
+          <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=700&q=80"
+               alt="ボクシング" loading="lazy">
+          <span class="fit-strip-tag">Train Hard</span>
+        </div>
+        <div class="fit-strip-cell">
+          <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=700&q=80"
+               alt="ジム器具" loading="lazy">
+          <span class="fit-strip-tag">Go Beyond</span>
+        </div>
       </div>
-      <div class="s3-cell">
-        <img class="s3-img"
-          src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=700&q=80"
-          alt="ワークアウト" loading="lazy">
-        <span class="s3-img-tag">Push Limits</span>
-      </div>
-    </div>
-    <div class="s3-stats">
-      <div class="s3-stat">
-        <div class="s3-stat-num">5AM</div>
-        <div class="s3-stat-lbl">OPEN</div>
-      </div>
-      <div class="s3-stat">
-        <div class="s3-stat-num">300+</div>
-        <div class="s3-stat-lbl">MEMBERS</div>
-      </div>
-      <div class="s3-stat" style="border-right:none;">
-        <div class="s3-stat-num" style="font-size:1rem;color:#fff;font-weight:600;">Dark × <span style="color:#FF5733;">Orange</span></div>
-        <div class="s3-stat-lbl">エネルギー・行動・強さ</div>
+      <div class="fit-stats reveal up d1">
+        <div class="fit-stat">
+          <span class="fit-stat-n">5AM</span>
+          <span class="fit-stat-l">Early Open</span>
+        </div>
+        <div class="fit-stat">
+          <span class="fit-stat-n" data-target="300" data-suffix="+">0+</span>
+          <span class="fit-stat-l">Members</span>
+        </div>
+        <div class="fit-stat">
+          <span class="fit-stat-n" data-target="12" data-suffix="種">0種</span>
+          <span class="fit-stat-l">プログラム数</span>
+        </div>
+        <div class="fit-stat">
+          <span class="fit-stat-n" style="font-size:1.05rem;color:#111;font-weight:600;line-height:1.45;">
+            Dark ×<br><span style="color:var(--fit-red);">Orange</span>
+          </span>
+          <span class="fit-stat-l">エネルギー・行動・強さ</span>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ================================================================ -->
-  <!-- SECTION 4 — WAFUU  Cream × Matcha × Sakura                       -->
-  <!-- ================================================================ -->
+  <!-- MARQUEE ④ Green (Wafuu) -->
+  <div class="m-band m-band--green" aria-hidden="true">
+    <div class="m-inner">
+      <span class="m-text">和風</span><span class="m-text">Japanese</span>
+      <span class="m-text">伝統</span><span class="m-text">Tradition</span>
+      <span class="m-text">季節</span><span class="m-text">Culture</span>
+      <span class="m-text">余白</span><span class="m-text">Zen</span>
+      <span class="m-text">和風</span><span class="m-text">Japanese</span>
+      <span class="m-text">伝統</span><span class="m-text">Tradition</span>
+      <span class="m-text">季節</span><span class="m-text">Culture</span>
+      <span class="m-text">余白</span><span class="m-text">Zen</span>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- WAFUU  ①禅の空気感 中央縦長画像+縦書き                     -->
+  <!--        ②モザイクコラージュ+俳句                             -->
+  <!-- ============================================================ -->
   <section id="wafuu">
-    <span class="section-label s4-label">和風・飲食 / 和菓子・伝統文化</span>
-    <div class="s4-header">
-      <h2 class="s4-brand">
-        花結び
-        <small>HANAYUI WAGASHI — Since 1924</small>
-      </h2>
-      <p class="s4-poem">四季の移ろいを<br>ひと菓子に宿して。<br>ていねいな時間の流れの中で。</p>
+    <div class="wafuu-hero">
+      <div class="wafuu-hero-img">
+        <img src="https://images.unsplash.com/photo-1753009712810-3f72c3f72548?w=900&q=85"
+             alt="抹茶を点てる手元" loading="eager">
+      </div>
+      <p class="wafuu-tate reveal right d2">四季の移ろいを<br>ひと菓子に宿して</p>
+      <div class="wafuu-hero-brand reveal left d2">
+        <h2 class="wafuu-hero-k">花結び</h2>
+        <span class="wafuu-hero-roman">HANAYUI — Since 1924</span>
+      </div>
+      <p class="wafuu-hero-foot reveal up d3">ていねいな時間の流れの中で。</p>
     </div>
-    <div class="s4-grid">
-      <div class="s4-main">
-        <img class="s4-img"
-          src="https://images.unsplash.com/photo-1753009712810-3f72c3f72548?w=700&q=80"
-          alt="抹茶を点てる" loading="lazy">
+
+    <div class="wafuu-detail">
+      <div class="wafuu-detail-top">
+        <h3 class="wafuu-detail-h reveal left">和の美意識は、<br>余白の中にある。</h3>
+        <div class="wafuu-haiku reveal right">
+          春風や<br>抹茶の香りに<br>誘はれて
+        </div>
       </div>
-      <div class="s4-cell">
-        <img class="s4-img"
-          src="https://images.unsplash.com/photo-1764512679985-ad1eb8d58cc4?w=700&q=80"
-          alt="抹茶と茶碗" loading="lazy">
+      <div class="wafuu-mosaic reveal up d1">
+        <div class="w-a">
+          <img src="https://images.unsplash.com/photo-1556639118-e7d828188ff9?w=700&q=80"
+               alt="桜並木の水路" loading="lazy">
+        </div>
+        <div class="w-b">
+          <img src="https://images.unsplash.com/photo-1764512679985-ad1eb8d58cc4?w=700&q=80"
+               alt="抹茶と茶碗" loading="lazy">
+        </div>
+        <div class="w-c">
+          <img src="https://images.unsplash.com/photo-1490806843957-31f4c9a91c65?w=900&q=80"
+               alt="日本の寺社" loading="lazy">
+        </div>
+        <div class="w-d">
+          <img src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=600&q=80"
+               alt="日本庭園" loading="lazy">
+        </div>
+        <div class="wafuu-dots">
+          <span class="wafuu-dot"></span><span class="wafuu-dot"></span><span class="wafuu-dot"></span>
+          <span class="wafuu-dot"></span><span class="wafuu-dot"></span><span class="wafuu-dot"></span>
+          <span class="wafuu-dot"></span><span class="wafuu-dot"></span><span class="wafuu-dot"></span>
+        </div>
+        <p class="wafuu-mosaic-q">"目に美しく、心に静かなウェブを。"</p>
       </div>
-      <div class="s4-cell">
-        <img class="s4-img"
-          src="https://images.unsplash.com/photo-1556639118-e7d828188ff9?w=700&q=80"
-          alt="桜並木の水路" loading="lazy">
-      </div>
-    </div>
-    <div class="s4-footer">
-      <p class="s4-kigo">"和の美意識は、余白の中にある。"<br>目に美しく、心に静かなウェブを。</p>
-      <div class="s4-tags">
-        <span class="s4-tag">抹茶グリーン</span>
-        <span class="s4-tag">桜ピンク</span>
-        <span class="s4-tag">Cream × Matcha</span>
-        <span class="s4-tag">Noto Serif JP</span>
+      <div class="wafuu-tags reveal up d2">
+        <span class="wafuu-tag">Cream × Matcha</span>
+        <span class="wafuu-tag">抹茶グリーン</span>
+        <span class="wafuu-tag">桜ピンク</span>
+        <span class="wafuu-tag">Noto Serif JP</span>
+        <span class="wafuu-tag">Cormorant Garamond</span>
+        <span class="wafuu-tag">余白設計</span>
       </div>
     </div>
   </section>
 
   <script>
+    /* ===== SMOOTH SCROLL ===== */
     function go(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
 
+    /* ===== SIDE NAV ===== */
     const sections = ['intro','corporate','creator','fire','wafuu'];
     const dots = Object.fromEntries(sections.map(id => [
       id, document.querySelector(`.side-dot[data-s="${id}"]`)
     ]));
-
-    const obs = new IntersectionObserver(entries => {
+    const navObs = new IntersectionObserver(entries => {
       entries.forEach(e => {
         if (!e.isIntersecting) return;
         sections.forEach(id => dots[id]?.classList.remove('active'));
         dots[e.target.id]?.classList.add('active');
       });
-    }, { threshold: 0.45 });
+    }, { threshold: 0.35 });
+    sections.forEach(id => { const el = document.getElementById(id); if (el) navObs.observe(el); });
 
-    sections.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) obs.observe(el);
-    });
+    /* ===== REVEAL ON SCROLL ===== */
+    const revEls = document.querySelectorAll('.reveal');
+    const revObs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    revEls.forEach(el => revObs.observe(el));
+
+    /* ===== PARALLAX (bg images only, applied to img inside container) ===== */
+    function doParallax() {
+      const scrollY = window.scrollY;
+      // Corporate hero bg
+      const cb = document.querySelector('.corp-hero-bg img');
+      if (cb) cb.style.transform = `translateY(${scrollY * 0.14}px)`;
+      // Fitness hero bg
+      const fb = document.querySelector('.fit-hero-bg img');
+      if (fb) {
+        const top = document.getElementById('fire').offsetTop;
+        fb.style.transform = `translateY(${Math.max(0, scrollY - top) * 0.14}px)`;
+      }
+      // Wafuu hero img (inside its centered container)
+      const wi = document.querySelector('.wafuu-hero-img img');
+      if (wi) {
+        const top = document.getElementById('wafuu').offsetTop;
+        wi.style.transform = `translateY(${Math.max(0, scrollY - top) * 0.1}px)`;
+      }
+    }
+    window.addEventListener('scroll', doParallax, { passive: true });
+    doParallax();
+
+    /* ===== COUNT-UP ===== */
+    function countUp(el) {
+      const target = parseInt(el.dataset.target);
+      const suffix = el.dataset.suffix || '';
+      const duration = 1600;
+      const start = performance.now();
+      (function frame(now) {
+        const t = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - t, 3);
+        el.textContent = Math.round(target * ease) + suffix;
+        if (t < 1) requestAnimationFrame(frame);
+      })(start);
+    }
+    const countEls = document.querySelectorAll('[data-target]');
+    const countObs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { countUp(e.target); countObs.unobserve(e.target); } });
+    }, { threshold: 0.5 });
+    countEls.forEach(el => countObs.observe(el));
   </script>
 </body>
 </html>
