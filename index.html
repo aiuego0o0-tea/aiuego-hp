@@ -1,0 +1,2921 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>aiuego｜ホームページ制作サービス</title>
+  <meta name="description" content="aiuego（あいうえご）は個人事業主・小規模企業の方に向けたHP制作サービスです。¥17,000〜のモニター価格でご提供中。修正2回無料・全国オンライン対応。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;700&family=Noto+Serif+JP:wght@300;400;600&family=Noto+Sans+JP:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===== CSS リセット & 基本 ===== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --color-main: #8BB8C8;
+      --color-deep: #5A89A0;
+      --color-sub: #7D9B76;
+      --color-base: #FAF8F5;
+      --color-text: #2C3A42;
+      --color-accent: #D6EEF5;
+      --color-white: #ffffff;
+      --color-border: #E8E2D9;
+      --color-beige: #F3EFE8;
+
+      --font-mincho: 'Shippori Mincho', 'Noto Serif JP', serif;
+      --font-serif: 'Noto Serif JP', serif;
+      --font-sans: 'Noto Sans JP', sans-serif;
+      --font-en: 'Cormorant Garamond', serif;
+
+      --section-gap: 110px;
+      --line-height: 2.1em;
+      --radius-card: 20px;
+      --radius-btn: 50px;
+      --transition: 0.3s ease;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--color-base);
+      color: var(--color-text);
+      font-family: var(--font-serif);
+      font-size: 16px;
+      line-height: var(--line-height);
+      -webkit-font-smoothing: antialiased;
+      /* スティッキーボトムバー分の余白 */
+      padding-bottom: 72px;
+    }
+
+    img { display: none; }
+
+    /* ===== フェードイン（IntersectionObserver） ===== */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .fade-in-delay-1 { transition-delay: 0.1s; }
+    .fade-in-delay-2 { transition-delay: 0.2s; }
+    .fade-in-delay-3 { transition-delay: 0.3s; }
+    .fade-in-delay-4 { transition-delay: 0.4s; }
+    .fade-in-delay-5 { transition-delay: 0.5s; }
+
+    /* ===== ヘッダー ===== */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(250, 248, 245, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .site-logo {
+      font-family: var(--font-en);
+      font-size: 1.5rem;
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      color: var(--color-deep);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .site-logo span {
+      font-family: var(--font-sans);
+      font-size: 0.65rem;
+      font-weight: 400;
+      color: var(--color-main);
+      letter-spacing: 0.12em;
+    }
+
+    .site-nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .site-nav a {
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--color-text);
+      text-decoration: none;
+      position: relative;
+      padding-bottom: 2px;
+      transition: color var(--transition);
+    }
+
+    .site-nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--color-main);
+      transition: width var(--transition);
+    }
+
+    .site-nav a:hover {
+      color: var(--color-deep);
+    }
+
+    .site-nav a:hover::after {
+      width: 100%;
+    }
+
+    .nav-cta {
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--color-white) !important;
+      background: var(--color-deep);
+      padding: 8px 22px;
+      border-radius: var(--radius-btn);
+      text-decoration: none !important;
+      transition: opacity var(--transition), background var(--transition);
+    }
+
+    .nav-cta::after { display: none !important; }
+
+    .nav-cta:hover {
+      opacity: 0.85;
+      color: var(--color-white) !important;
+    }
+
+    /* ハンバーガーメニュー */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 1.5px;
+      background: var(--color-text);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: translateY(6.5px) rotate(45deg);
+    }
+
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+      transform: translateY(-6.5px) rotate(-45deg);
+    }
+
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: 64px;
+      left: 0;
+      right: 0;
+      background: rgba(250, 248, 245, 0.97);
+      backdrop-filter: blur(12px);
+      padding: 24px;
+      border-bottom: 1px solid var(--color-border);
+      z-index: 99;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .mobile-nav.open {
+      display: flex;
+    }
+
+    .mobile-nav a {
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: var(--color-text);
+      text-decoration: none;
+      padding: 14px 8px;
+      border-bottom: 1px solid var(--color-border);
+      transition: color var(--transition);
+    }
+
+    .mobile-nav a:last-child {
+      border-bottom: none;
+      margin-top: 12px;
+      background: var(--color-deep);
+      color: var(--color-white);
+      border-radius: var(--radius-btn);
+      text-align: center;
+      padding: 14px;
+    }
+
+    /* ===== ヒーローセクション ===== */
+    .hero {
+      min-height: 88vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(
+        135deg,
+        #EEF7FB 0%,
+        #F5F0EA 35%,
+        #E8F4F8 65%,
+        #F0EDE6 100%
+      );
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -20%;
+      right: -10%;
+      width: 55%;
+      height: 130%;
+      background: radial-gradient(
+        ellipse at center,
+        rgba(139, 184, 200, 0.22) 0%,
+        rgba(214, 238, 245, 0.15) 50%,
+        transparent 75%
+      );
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -10%;
+      left: -5%;
+      width: 40%;
+      height: 80%;
+      background: radial-gradient(
+        ellipse at center,
+        rgba(125, 155, 118, 0.10) 0%,
+        transparent 70%
+      );
+      pointer-events: none;
+    }
+
+    /* 装飾円 */
+    .hero-deco {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-deco-1 {
+      width: 360px;
+      height: 360px;
+      right: 8%;
+      top: 50%;
+      transform: translateY(-50%);
+      background: radial-gradient(
+        circle,
+        rgba(139, 184, 200, 0.18) 0%,
+        rgba(214, 238, 245, 0.10) 60%,
+        transparent 100%
+      );
+      border: 1px solid rgba(139, 184, 200, 0.20);
+    }
+
+    .hero-deco-2 {
+      width: 200px;
+      height: 200px;
+      right: 18%;
+      top: 15%;
+      background: radial-gradient(
+        circle,
+        rgba(125, 155, 118, 0.12) 0%,
+        transparent 70%
+      );
+      border: 1px solid rgba(125, 155, 118, 0.15);
+    }
+
+    .hero-deco-3 {
+      width: 120px;
+      height: 120px;
+      left: 3%;
+      bottom: 15%;
+      background: radial-gradient(
+        circle,
+        rgba(139, 184, 200, 0.15) 0%,
+        transparent 70%
+      );
+    }
+
+    .hero-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 24px;
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .hero-content {
+      /* テキスト側 */
+    }
+
+    /* キャラクタープレースホルダー（画像準備後にimgタグに差し替え） */
+    .hero-character-placeholder {
+      width: 260px;
+      height: 380px;
+      border: 2px dashed var(--color-main);
+      border-radius: 20px;
+      background: rgba(214, 238, 245, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .char-placeholder-inner {
+      text-align: center;
+      color: var(--color-deep);
+    }
+
+    .char-placeholder-inner p {
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      font-weight: 300;
+      color: var(--color-deep);
+      line-height: 1.8;
+      margin-top: 8px;
+    }
+
+    /* ヒーロー最上部のサービスラベル */
+    .hero-service-label {
+      display: inline-block;
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      color: var(--color-deep);
+      background: rgba(139, 184, 200, 0.18);
+      border: 1px solid rgba(139, 184, 200, 0.40);
+      border-radius: 4px;
+      padding: 4px 12px;
+      margin-bottom: 14px;
+    }
+
+    .hero-label {
+      font-family: var(--font-en);
+      font-size: 0.85rem;
+      font-style: italic;
+      letter-spacing: 0.18em;
+      color: var(--color-main);
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .hero-title {
+      font-family: var(--font-mincho);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 600;
+      line-height: 1.55;
+      color: var(--color-text);
+      margin-bottom: 28px;
+      letter-spacing: 0.04em;
+    }
+
+    .hero-title .accent {
+      color: var(--color-deep);
+      position: relative;
+    }
+
+    .hero-title .accent::after {
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--color-main), var(--color-sub));
+      border-radius: 2px;
+    }
+
+    .hero-subtitle {
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
+      font-weight: 300;
+      line-height: 2.0em;
+      color: #4A5A62;
+      margin-bottom: 32px;
+      max-width: 520px;
+    }
+
+    /* ミニプロフィール */
+    .hero-profile {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255,255,255,0.65);
+      border: 1px solid rgba(139, 184, 200, 0.30);
+      border-radius: 12px;
+      padding: 10px 18px;
+      margin-bottom: 28px;
+    }
+
+    .hero-profile-icon {
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .hero-profile-text {
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      font-weight: 300;
+      color: var(--color-text);
+      line-height: 1.7;
+    }
+
+    .hero-profile-text strong {
+      font-weight: 500;
+      color: var(--color-deep);
+    }
+
+    .hero-teaser {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,0.70);
+      border: 1px solid rgba(139, 184, 200, 0.35);
+      border-radius: 50px;
+      padding: 10px 22px 10px 16px;
+      margin-bottom: 28px;
+      backdrop-filter: blur(6px);
+    }
+
+    .hero-teaser-badge {
+      font-family: var(--font-sans);
+      font-size: 0.65rem;
+      font-weight: 500;
+      color: var(--color-white);
+      background: var(--color-sub);
+      border-radius: 20px;
+      padding: 3px 10px;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+      position: relative;
+      cursor: help;
+    }
+
+    /* ツールチップ（モニター価格の説明） */
+    .hero-teaser-badge::after {
+      content: attr(data-tip);
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(44, 58, 66, 0.92);
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: 400;
+      white-space: nowrap;
+      padding: 6px 12px;
+      border-radius: 6px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+      letter-spacing: 0.03em;
+      z-index: 10;
+    }
+
+    .hero-teaser-badge:hover::after,
+    .hero-teaser-badge:focus::after {
+      opacity: 1;
+    }
+
+    /* 残り受付件数バッジ */
+    .hero-teaser-urgency {
+      font-family: var(--font-sans);
+      font-size: 0.65rem;
+      font-weight: 500;
+      color: var(--color-white);
+      background: #C0694A;
+      border-radius: 20px;
+      padding: 3px 10px;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+
+    .hero-teaser-text {
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      font-weight: 400;
+      color: var(--color-text);
+      letter-spacing: 0.04em;
+    }
+
+    .hero-teaser-price {
+      font-family: var(--font-en);
+      font-size: 1.15rem;
+      font-weight: 400;
+      color: var(--color-deep);
+      letter-spacing: 0.02em;
+    }
+
+    /* 安心バッジ */
+    .trust-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+
+    .trust-badges span {
+      font-family: var(--font-sans);
+      font-size: 0.76rem;
+      font-weight: 400;
+      color: var(--color-deep);
+      background: rgba(255,255,255,0.75);
+      border: 1px solid rgba(139, 184, 200, 0.35);
+      border-radius: 50px;
+      padding: 5px 14px;
+      white-space: nowrap;
+      letter-spacing: 0.04em;
+    }
+
+    .trust-badges span::before {
+      content: '';
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--color-main);
+      margin-right: 7px;
+      vertical-align: middle;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn-primary {
+      font-family: var(--font-sans);
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: var(--color-white);
+      background: linear-gradient(135deg, var(--color-deep), #4A7890);
+      padding: 16px 40px;
+      border-radius: var(--radius-btn);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      transition: opacity var(--transition), transform var(--transition), box-shadow var(--transition);
+      box-shadow: 0 6px 24px rgba(90, 137, 160, 0.30);
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.88;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(90, 137, 160, 0.38);
+    }
+
+    .btn-secondary {
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      font-weight: 400;
+      color: var(--color-deep);
+      background: transparent;
+      padding: 14px 32px;
+      border-radius: var(--radius-btn);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      transition: background var(--transition), color var(--transition);
+      border: 1.5px solid var(--color-main);
+    }
+
+    .btn-secondary:hover {
+      background: var(--color-accent);
+      color: var(--color-deep);
+    }
+
+    /* ===== バリュープロップ帯 ===== */
+    .value-prop-section {
+      background: var(--color-white);
+      padding: 56px 24px;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .value-prop-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .value-prop-item {
+      text-align: center;
+      padding: 28px 20px;
+    }
+
+    /* .value-prop-icon は削除（絵文字アイコン廃止） */
+
+    .value-prop-num {
+      font-family: var(--font-en);
+      font-size: 2.4rem;
+      font-weight: 400;
+      color: var(--color-deep);
+      letter-spacing: -0.02em;
+      line-height: 1;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .value-prop-label {
+      font-family: var(--font-mincho);
+      font-size: 0.96rem;
+      font-weight: 600;
+      color: var(--color-text);
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .value-prop-desc {
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      font-weight: 300;
+      color: #6A7A82;
+      line-height: 1.8;
+    }
+
+    .value-prop-divider {
+      width: 1px;
+      background: var(--color-border);
+      margin: auto 0;
+      height: 80px;
+      align-self: center;
+    }
+
+    /* ===== セクション共通 ===== */
+    .section {
+      padding: var(--section-gap) 24px;
+    }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: var(--font-en);
+      font-size: 0.78rem;
+      font-style: italic;
+      letter-spacing: 0.22em;
+      color: var(--color-main);
+      display: block;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      font-family: var(--font-mincho);
+      font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+      font-weight: 600;
+      line-height: 1.5;
+      color: var(--color-text);
+      margin-bottom: 16px;
+      letter-spacing: 0.04em;
+    }
+
+    .section-lead {
+      font-family: var(--font-serif);
+      font-size: 0.98rem;
+      font-weight: 300;
+      line-height: 2.1em;
+      color: #5A6A72;
+      max-width: 580px;
+      margin-bottom: 56px;
+    }
+
+    /* ===== こんな方へ ===== */
+    .target-section {
+      background: var(--color-white);
+    }
+
+    .target-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .target-card {
+      background: var(--color-base);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-card);
+      padding: 32px 28px;
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+    }
+
+    .target-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 36px rgba(139, 184, 200, 0.18);
+      border-color: var(--color-main);
+    }
+
+    .target-icon {
+      width: 64px;
+      height: 64px;
+      display: block;
+      margin-bottom: 18px;
+      mix-blend-mode: multiply;
+    }
+
+    .target-card-title {
+      font-family: var(--font-mincho);
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 10px;
+      letter-spacing: 0.04em;
+    }
+
+    .target-card-desc {
+      font-family: var(--font-sans);
+      font-size: 0.84rem;
+      font-weight: 300;
+      line-height: 1.9em;
+      color: #6A7A82;
+    }
+
+    /* ===== 強み ===== */
+    .strength-section {
+      background: linear-gradient(180deg, var(--color-base) 0%, #EEF7FB 100%);
+    }
+
+    .strength-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .strength-item {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 24px;
+      align-items: start;
+      background: var(--color-white);
+      border-radius: var(--radius-card);
+      padding: 28px 32px;
+      border: 1px solid var(--color-border);
+      transition: box-shadow var(--transition), transform var(--transition);
+    }
+
+    .strength-item:hover {
+      box-shadow: 0 8px 28px rgba(139, 184, 200, 0.14);
+      transform: translateX(4px);
+    }
+
+    .strength-num {
+      display: block;
+      width: 52px;
+      height: 52px;
+      flex-shrink: 0;
+      mix-blend-mode: multiply;
+    }
+
+    .strength-body-title {
+      font-family: var(--font-mincho);
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 8px;
+      letter-spacing: 0.04em;
+    }
+
+    .strength-body-desc {
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 300;
+      line-height: 1.9em;
+      color: #6A7A82;
+    }
+
+    /* 保守プラン継続収益バッジ */
+    .maintenance-model-note {
+      margin-top: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(125, 155, 118, 0.10);
+      border: 1px solid rgba(125, 155, 118, 0.25);
+      border-radius: 8px;
+      padding: 6px 14px;
+    }
+
+    .maintenance-model-note span {
+      font-family: var(--font-sans);
+      font-size: 0.76rem;
+      font-weight: 400;
+      color: var(--color-sub);
+    }
+
+    /* aiuego ブランド区切り線 */
+    .brand-divider {
+      display: flex;
+      justify-content: center;
+      padding: 8px 0;
+      mix-blend-mode: multiply;
+    }
+
+    .brand-divider img {
+      max-width: 320px;
+      width: 80%;
+      height: auto;
+    }
+
+    /* ===== ポートフォリオ ===== */
+    .portfolio-section {
+      background: var(--color-base);
+    }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-bottom: 36px;
+    }
+
+    .portfolio-card {
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+      background: var(--color-white);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+
+    .portfolio-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 36px rgba(0,0,0,0.10);
+    }
+
+    .portfolio-thumb {
+      height: 160px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .portfolio-thumb-salon {
+      background: linear-gradient(135deg, #8BB8C8 0%, #D6EEF5 100%);
+    }
+
+    .portfolio-thumb-construction {
+      background: linear-gradient(135deg, #7D9B76 0%, #C5DEC2 100%);
+    }
+
+    .portfolio-thumb-creator {
+      background: linear-gradient(135deg, #9B7DC8 0%, #D6C5F0 100%);
+    }
+
+    .portfolio-thumb-lp {
+      background: linear-gradient(135deg, #C8A07D 0%, #F0DCC5 100%);
+    }
+
+    .portfolio-thumb-label {
+      font-family: var(--font-sans);
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 0.10em;
+      background: rgba(0,0,0,0.15);
+      border-radius: 6px;
+      padding: 4px 12px;
+    }
+
+    .portfolio-card-body {
+      padding: 20px 22px;
+    }
+
+    .portfolio-card-genre {
+      font-family: var(--font-sans);
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--color-main);
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .portfolio-card-title {
+      font-family: var(--font-mincho);
+      font-size: 0.98rem;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 6px;
+      letter-spacing: 0.04em;
+    }
+
+    .portfolio-card-desc {
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      font-weight: 300;
+      color: #6A7A82;
+      line-height: 1.8;
+    }
+
+    .portfolio-more {
+      text-align: center;
+    }
+
+    .portfolio-more a {
+      font-family: var(--font-sans);
+      font-size: 0.86rem;
+      font-weight: 400;
+      color: var(--color-deep);
+      text-decoration: none;
+      border-bottom: 1px solid var(--color-main);
+      padding-bottom: 2px;
+      letter-spacing: 0.06em;
+      transition: opacity var(--transition);
+    }
+
+    .portfolio-more a:hover {
+      opacity: 0.70;
+    }
+
+    /* ===== お客様の声 ===== */
+    .testimonial-section {
+      background: var(--color-white);
+    }
+
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .testimonial-card {
+      background: var(--color-base);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-card);
+      padding: 28px 26px;
+      position: relative;
+      transition: box-shadow var(--transition);
+    }
+
+    .testimonial-card:hover {
+      box-shadow: 0 8px 28px rgba(139, 184, 200, 0.14);
+    }
+
+    .testimonial-stars {
+      color: #E6A830;
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .testimonial-quote {
+      font-family: var(--font-serif);
+      font-size: 0.88rem;
+      font-weight: 300;
+      line-height: 2.0em;
+      color: var(--color-text);
+      margin-bottom: 18px;
+    }
+
+    .testimonial-author {
+      font-family: var(--font-sans);
+      font-size: 0.76rem;
+      font-weight: 400;
+      color: #8A9AA2;
+      letter-spacing: 0.06em;
+    }
+
+    .testimonial-permission {
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      font-weight: 300;
+      color: #A0AEB5;
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    /* ===== サービス・料金 ===== */
+    .service-section {
+      background: var(--color-white);
+    }
+
+    /* 緊急性バナー */
+    .urgency-banner {
+      background: linear-gradient(135deg, rgba(192, 105, 74, 0.08) 0%, rgba(192, 105, 74, 0.04) 100%);
+      border: 1px solid rgba(192, 105, 74, 0.25);
+      border-radius: 12px;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 36px;
+    }
+
+    /* .urgency-banner-icon は削除（絵文字アイコン廃止） */
+
+    .urgency-banner-text {
+      font-family: var(--font-sans);
+      font-size: 0.86rem;
+      font-weight: 400;
+      color: #8B4A30;
+      line-height: 1.7;
+    }
+
+    .urgency-banner-text strong {
+      font-weight: 600;
+    }
+
+    .price-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    .price-card {
+      border-radius: var(--radius-card);
+      padding: 36px 32px;
+      border: 1.5px solid var(--color-border);
+      background: var(--color-base);
+      position: relative;
+      transition: box-shadow var(--transition), transform var(--transition);
+    }
+
+    .price-card:hover {
+      box-shadow: 0 12px 40px rgba(139, 184, 200, 0.18);
+      transform: translateY(-4px);
+    }
+
+    .price-card.featured {
+      border-color: var(--color-main);
+      background: linear-gradient(145deg, #EEF7FB, #F5F0EA);
+    }
+
+    .price-badge {
+      position: absolute;
+      top: -1px;
+      right: 24px;
+      font-family: var(--font-sans);
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--color-white);
+      background: var(--color-sub);
+      padding: 4px 14px;
+      border-radius: 0 0 10px 10px;
+      letter-spacing: 0.08em;
+    }
+
+    .price-card-label {
+      font-family: var(--font-en);
+      font-size: 0.78rem;
+      font-style: italic;
+      letter-spacing: 0.18em;
+      color: var(--color-main);
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .price-card-title {
+      font-family: var(--font-mincho);
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 20px;
+      letter-spacing: 0.04em;
+    }
+
+    .price-main {
+      margin-bottom: 24px;
+    }
+
+    .price-amount {
+      font-family: var(--font-en);
+      font-size: 2.6rem;
+      font-weight: 400;
+      color: var(--color-deep);
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    .price-unit {
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      color: #7A8A92;
+      margin-left: 4px;
+    }
+
+    .price-note {
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      color: var(--color-sub);
+      margin-top: 6px;
+      font-weight: 400;
+    }
+
+    /* 保守プラン継続訴求テキスト */
+    .maintenance-appeal {
+      margin-top: 12px;
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      font-weight: 300;
+      color: #5A6A72;
+      line-height: 1.8;
+      border-top: 1px solid var(--color-border);
+      padding-top: 12px;
+    }
+
+    .maintenance-appeal strong {
+      color: var(--color-sub);
+      font-weight: 500;
+    }
+
+    .price-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .price-features li {
+      font-family: var(--font-sans);
+      font-size: 0.84rem;
+      font-weight: 300;
+      color: var(--color-text);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      line-height: 1.7em;
+    }
+
+    .price-features li::before {
+      content: '✦';
+      color: var(--color-main);
+      font-size: 0.6rem;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+
+    .coconala-note {
+      background: var(--color-accent);
+      border: 1px solid rgba(139, 184, 200, 0.30);
+      border-radius: var(--radius-card);
+      padding: 28px 32px;
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    /* .coconala-icon は削除（絵文字アイコン廃止） */
+
+    .coconala-body p {
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      line-height: 1.9em;
+      font-weight: 300;
+      color: var(--color-text);
+    }
+
+    .coconala-body strong {
+      color: var(--color-deep);
+      font-weight: 500;
+    }
+
+    /* ===== 制作の流れ ===== */
+    .flow-section {
+      background: linear-gradient(180deg, #EEF7FB 0%, var(--color-base) 100%);
+    }
+
+    .flow-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+    }
+
+    .flow-steps::before {
+      content: '';
+      position: absolute;
+      left: 28px;
+      top: 20px;
+      bottom: 20px;
+      width: 2px;
+      background: linear-gradient(180deg, var(--color-main), var(--color-sub));
+      border-radius: 2px;
+    }
+
+    .flow-step {
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      gap: 24px;
+      padding: 24px 0;
+      align-items: flex-start;
+    }
+
+    .flow-step-num {
+      width: 58px;
+      height: 58px;
+      display: block;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+      mix-blend-mode: multiply;
+    }
+
+    .flow-step-body {
+      background: var(--color-white);
+      border-radius: var(--radius-card);
+      padding: 24px 28px;
+      border: 1px solid var(--color-border);
+      margin-top: 6px;
+    }
+
+    .flow-step-title {
+      font-family: var(--font-mincho);
+      font-size: 1.0rem;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 8px;
+      letter-spacing: 0.04em;
+    }
+
+    .flow-step-desc {
+      font-family: var(--font-sans);
+      font-size: 0.84rem;
+      font-weight: 300;
+      line-height: 1.9em;
+      color: #6A7A82;
+    }
+
+    /* ===== FAQ ===== */
+    .faq-section {
+      background: var(--color-white);
+    }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      transition: border-color var(--transition);
+    }
+
+    .faq-item.open {
+      border-color: var(--color-main);
+    }
+
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 22px 28px;
+      text-align: left;
+      transition: background var(--transition);
+    }
+
+    .faq-question:hover {
+      background: var(--color-base);
+    }
+
+    .faq-item.open .faq-question {
+      background: linear-gradient(135deg, rgba(214, 238, 245, 0.4), rgba(250, 248, 245, 0.6));
+    }
+
+    .faq-q-text {
+      font-family: var(--font-mincho);
+      font-size: 0.96rem;
+      font-weight: 600;
+      color: var(--color-text);
+      letter-spacing: 0.03em;
+      line-height: 1.6;
+    }
+
+    .faq-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background var(--transition), transform var(--transition);
+    }
+
+    .faq-item.open .faq-icon {
+      background: var(--color-main);
+      transform: rotate(45deg);
+    }
+
+    .faq-icon::before,
+    .faq-icon::after {
+      content: '';
+      display: block;
+      background: var(--color-deep);
+      border-radius: 2px;
+      position: absolute;
+      transition: background var(--transition);
+    }
+
+    .faq-icon {
+      position: relative;
+    }
+
+    .faq-icon::before {
+      width: 10px;
+      height: 1.5px;
+    }
+
+    .faq-icon::after {
+      width: 1.5px;
+      height: 10px;
+    }
+
+    .faq-item.open .faq-icon::before,
+    .faq-item.open .faq-icon::after {
+      background: var(--color-white);
+    }
+
+    .faq-answer {
+      display: none;
+      padding: 0 28px 24px;
+    }
+
+    .faq-item.open .faq-answer {
+      display: block;
+    }
+
+    .faq-a-text {
+      font-family: var(--font-sans);
+      font-size: 0.86rem;
+      font-weight: 300;
+      line-height: 2.0em;
+      color: #5A6A72;
+      border-top: 1px solid var(--color-border);
+      padding-top: 18px;
+    }
+
+    /* ===== お問い合わせ ===== */
+    .contact-section {
+      background: linear-gradient(
+        135deg,
+        #EEF7FB 0%,
+        #F5F0EA 50%,
+        #E8F4F8 100%
+      );
+      text-align: center;
+    }
+
+    .contact-inner {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .contact-cta-block {
+      background: rgba(255, 255, 255, 0.65);
+      border: 1px solid rgba(139, 184, 200, 0.30);
+      border-radius: 28px;
+      padding: 48px 40px;
+      backdrop-filter: blur(8px);
+      margin-bottom: 40px;
+    }
+
+    .contact-lead {
+      font-family: var(--font-serif);
+      font-size: 0.96rem;
+      font-weight: 300;
+      line-height: 2.1em;
+      color: #5A6A72;
+      margin-bottom: 32px;
+    }
+
+    .contact-btn-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-line {
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--color-white);
+      background: #06C755;
+      padding: 14px 36px;
+      border-radius: var(--radius-btn);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      transition: opacity var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-line:hover {
+      opacity: 0.85;
+    }
+
+    .contact-sub-note {
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      font-weight: 300;
+      color: #8A9AA2;
+    }
+
+    .sns-links {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .sns-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-sans);
+      font-size: 0.84rem;
+      font-weight: 400;
+      color: var(--color-deep);
+      text-decoration: none;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(139, 184, 200, 0.30);
+      border-radius: 50px;
+      padding: 10px 20px;
+      transition: background var(--transition), box-shadow var(--transition);
+    }
+
+    .sns-link:hover {
+      background: var(--color-white);
+      box-shadow: 0 4px 16px rgba(139, 184, 200, 0.22);
+    }
+
+    .sns-icon {
+      font-size: 1.1rem;
+    }
+
+    /* ===== フッター ===== */
+    .site-footer {
+      background: var(--color-beige);
+      border-top: 1px solid var(--color-border);
+      padding: 56px 24px 36px;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 40px;
+      align-items: start;
+      margin-bottom: 40px;
+    }
+
+    .footer-logo {
+      font-family: var(--font-en);
+      font-size: 1.6rem;
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      color: var(--color-deep);
+      text-decoration: none;
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .footer-concept {
+      font-family: var(--font-serif);
+      font-size: 0.84rem;
+      font-weight: 300;
+      line-height: 2.0em;
+      color: #7A8A92;
+      max-width: 340px;
+    }
+
+    .footer-sns {
+      display: flex;
+      gap: 12px;
+    }
+
+    .footer-sns-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--color-white);
+      border: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: background var(--transition), border-color var(--transition), transform var(--transition);
+    }
+
+    .footer-sns-icon:hover {
+      background: var(--color-accent);
+      border-color: var(--color-main);
+      transform: translateY(-2px);
+    }
+
+    .footer-divider {
+      height: 1px;
+      background: var(--color-border);
+      margin-bottom: 24px;
+    }
+
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-copyright {
+      font-family: var(--font-en);
+      font-size: 0.78rem;
+      color: #9AABB2;
+      letter-spacing: 0.08em;
+    }
+
+    .footer-nav {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-nav a {
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      color: #7A8A92;
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+
+    .footer-nav a:hover {
+      color: var(--color-deep);
+    }
+
+    /* ===== セパレーター装飾 ===== */
+    .section-wave {
+      height: 2px;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        var(--color-border) 20%,
+        var(--color-main) 50%,
+        var(--color-border) 80%,
+        transparent 100%
+      );
+      max-width: 120px;
+      margin: 0 auto 48px;
+      border-radius: 2px;
+    }
+
+    /* ===== スティッキーボトムバー ===== */
+    .sticky-cta {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+      background: rgba(250, 248, 245, 0.95);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-top: 1px solid var(--color-border);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      transform: translateY(100%);
+      transition: transform 0.4s ease;
+    }
+
+    .sticky-cta.visible {
+      transform: translateY(0);
+    }
+
+    .sticky-cta-text {
+      font-family: var(--font-sans);
+      font-size: 0.86rem;
+      font-weight: 400;
+      color: var(--color-text);
+      letter-spacing: 0.04em;
+    }
+
+    .sticky-cta-text strong {
+      color: var(--color-deep);
+      font-weight: 500;
+    }
+
+    .sticky-cta-btn {
+      font-family: var(--font-sans);
+      font-size: 0.84rem;
+      font-weight: 500;
+      color: var(--color-white);
+      background: linear-gradient(135deg, var(--color-deep), #4A7890);
+      padding: 10px 28px;
+      border-radius: var(--radius-btn);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+      transition: opacity var(--transition), transform var(--transition);
+      box-shadow: 0 4px 16px rgba(90, 137, 160, 0.28);
+      flex-shrink: 0;
+    }
+
+    .sticky-cta-btn:hover {
+      opacity: 0.88;
+      transform: translateY(-1px);
+    }
+
+    /* ===== レスポンシブ ===== */
+    @media (max-width: 900px) {
+      .hero-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-character-placeholder {
+        display: none;
+      }
+
+      .value-prop-inner {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .value-prop-divider {
+        display: none;
+      }
+
+      .value-prop-item {
+        border-bottom: 1px solid var(--color-border);
+        padding: 24px 16px;
+      }
+
+      .value-prop-item:last-child {
+        border-bottom: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      :root {
+        --section-gap: 80px;
+      }
+
+      .site-nav {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .hero-inner {
+        padding: 60px 0;
+      }
+
+      .hero-deco-1 {
+        display: none;
+      }
+
+      .flow-steps::before {
+        left: 24px;
+      }
+
+      .flow-step {
+        grid-template-columns: 52px 1fr;
+        gap: 16px;
+      }
+
+      .flow-step-num {
+        width: 50px;
+        height: 50px;
+        box-shadow: 0 0 0 5px var(--color-base);
+      }
+
+      .footer-top {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+
+      .coconala-note {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .contact-cta-block {
+        padding: 36px 24px;
+      }
+
+      .sticky-cta-text {
+        font-size: 0.78rem;
+      }
+
+      .urgency-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      :root {
+        --section-gap: 64px;
+      }
+
+      .hero-title {
+        font-size: 1.75rem;
+      }
+
+      .price-amount {
+        font-size: 2.1rem;
+      }
+
+      .faq-question {
+        padding: 18px 20px;
+      }
+
+      .faq-answer {
+        padding: 0 20px 20px;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .btn-primary,
+      .btn-secondary {
+        width: 100%;
+        text-align: center;
+      }
+
+      .strength-item {
+        padding: 22px 20px;
+      }
+
+      .sticky-cta {
+        flex-direction: column;
+        gap: 8px;
+        padding: 10px 16px;
+      }
+
+      .sticky-cta-btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
+
+    /* ===== ポートフォリオカード「詳細を見る」 ===== */
+    .portfolio-card-more {
+      display: inline-block;
+      margin-top: 12px;
+      font-family: var(--font-en);
+      font-size: 0.78rem;
+      color: var(--color-main);
+      letter-spacing: 0.06em;
+    }
+
+    /* ===== ポートフォリオモーダル ===== */
+    .portfolio-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .portfolio-modal.is-open {
+      display: flex;
+    }
+
+    .portfolio-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(44, 58, 66, 0.55);
+      backdrop-filter: blur(4px);
+    }
+
+    .portfolio-modal-content {
+      position: relative;
+      background: var(--color-white);
+      border-radius: 20px;
+      max-width: 640px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+      z-index: 1;
+    }
+
+    .portfolio-modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--color-border);
+      background: var(--color-white);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text);
+      z-index: 2;
+    }
+
+    .portfolio-modal-thumb {
+      width: 100%;
+      height: 220px;
+      border-radius: 20px 20px 0 0;
+      overflow: hidden;
+    }
+
+    .portfolio-modal-body {
+      padding: 28px 32px 36px;
+    }
+
+    .portfolio-modal-title {
+      font-family: var(--font-mincho);
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--color-text);
+      margin: 8px 0 14px;
+      letter-spacing: 0.04em;
+    }
+
+    .portfolio-modal-desc {
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      font-weight: 300;
+      color: #6A7A82;
+      line-height: 1.9;
+      margin-bottom: 18px;
+    }
+
+    .portfolio-modal-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 22px;
+    }
+
+    .portfolio-modal-tag {
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      color: var(--color-deep);
+      background: var(--color-accent);
+      border-radius: 20px;
+      padding: 3px 12px;
+      letter-spacing: 0.04em;
+    }
+
+    .portfolio-modal-demo {
+      border-top: 1px solid var(--color-border);
+      padding-top: 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .portfolio-modal-demo-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-sans);
+      font-size: 0.84rem;
+      color: var(--color-deep);
+      background: var(--color-accent);
+      border-radius: 50px;
+      padding: 8px 20px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .portfolio-modal-demo-btn:hover {
+      background: rgba(139, 184, 200, 0.3);
+    }
+
+    .portfolio-modal-pending {
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      color: #9AA8AF;
+    }
+
+    .portfolio-modal-sample-note {
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
+      color: #B0BEC5;
+      margin-left: auto;
+    }
+
+    @media (max-width: 480px) {
+      .portfolio-modal-body {
+        padding: 20px 20px 28px;
+      }
+      .portfolio-modal-thumb {
+        height: 160px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ===== ヘッダー ===== -->
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+      <a href="#" class="site-logo" aria-label="aiuego トップへ">
+        aiuego
+        <span>あいうえご</span>
+      </a>
+
+      <nav class="site-nav" aria-label="メインナビゲーション">
+        <a href="#target">こんな方へ</a>
+        <a href="#portfolio">実績</a>
+        <a href="#service">料金</a>
+        <a href="#faq">よくある質問</a>
+        <a href="#contact" class="nav-cta">お問い合わせ</a>
+      </nav>
+
+      <button class="hamburger" aria-label="メニューを開く" aria-expanded="false" onclick="toggleMenu(this)">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <nav class="mobile-nav" id="mobileNav" aria-label="モバイルナビゲーション">
+    <a href="#target" onclick="closeMobileNav()">こんな方へ</a>
+    <a href="#strength" onclick="closeMobileNav()">aiuegoの強み</a>
+    <a href="#portfolio" onclick="closeMobileNav()">実績</a>
+    <a href="#service" onclick="closeMobileNav()">サービス・料金</a>
+    <a href="#flow" onclick="closeMobileNav()">制作の流れ</a>
+    <a href="#faq" onclick="closeMobileNav()">よくある質問</a>
+    <a href="#contact" onclick="closeMobileNav()">お問い合わせ</a>
+  </nav>
+
+  <main>
+
+    <!-- ===== ヒーロー ===== -->
+    <section class="hero" aria-label="ヒーロービジュアル">
+      <div class="hero-deco hero-deco-1" aria-hidden="true"></div>
+      <div class="hero-deco hero-deco-2" aria-hidden="true"></div>
+      <div class="hero-deco hero-deco-3" aria-hidden="true"></div>
+
+      <div class="hero-inner">
+        <div class="hero-content">
+          <!-- 修正1: サービスが一目でわかるラベル -->
+          <span class="hero-service-label fade-in">ホームページ制作サービス</span>
+
+          <span class="hero-label fade-in fade-in-delay-1">aiuego — web creation</span>
+
+          <h1 class="hero-title fade-in fade-in-delay-2">
+            あいうえ<span class="accent">ご</span>から始まる、<br>
+            あなただけの<span class="accent">ego</span>を形に。
+          </h1>
+
+          <p class="hero-subtitle fade-in fade-in-delay-3">
+            名刺がわりのホームページを、想いのこもったデザインで。<br>
+            個人事業主・フリーランスの方の「伝えたい」を、<br>
+            ていねいに、やさしく、かたちにします。
+          </p>
+
+          <!-- 修正2: ミニプロフィール（制作者を見せる） -->
+          <div class="hero-profile fade-in fade-in-delay-3" aria-label="制作者プロフィール">
+            <p class="hero-profile-text">
+              <strong>aiuego（あいうえご）</strong> — フリーランスWebデザイナー。<br>
+              サロン・工務店・クリエイターなど多業種のHP制作を担当。
+            </p>
+          </div>
+
+          <!-- 修正6: 緊急性のある価格バッジ -->
+          <div class="hero-teaser fade-in fade-in-delay-4" aria-label="モニター価格案内">
+            <span class="hero-teaser-badge" data-tip="実績・口コミをいただく代わりに特別価格でご提供">モニター価格</span>
+            <span class="hero-teaser-urgency">残り受付 3件</span>
+            <span class="hero-teaser-text">HP制作</span>
+            <span class="hero-teaser-price">¥17,000〜</span>
+          </div>
+
+          <!-- 修正3: 安心バッジをヒーロー下に移動 -->
+          <div class="trust-badges fade-in fade-in-delay-4" aria-label="安心ポイント">
+            <span>修正2回無料</span>
+            <span>3営業日以内にお返事</span>
+            <span>相談・見積もり無料</span>
+            <span>全国オンライン対応</span>
+          </div>
+
+          <div class="hero-actions fade-in fade-in-delay-5">
+            <a href="#contact" class="btn-primary">まずは無料相談する</a>
+            <a href="#service" class="btn-secondary">料金をみる</a>
+          </div>
+        </div>
+
+        <!-- 修正4: キャラクタープレースホルダー（画像準備後にimgタグに差し替え） -->
+        <div class="hero-character-placeholder fade-in fade-in-delay-3" aria-hidden="true">
+          <!-- 水色髪・白和装のaiuegoキャラクター -->
+          <div class="char-placeholder-inner">
+            <p>キャラクター<br>準備中</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 修正12: バリュープロップ帯（ヒーロー直後） ===== -->
+    <div class="value-prop-section" aria-label="3つの価値">
+      <div class="value-prop-inner">
+        <div class="value-prop-item fade-in">
+          <span class="value-prop-num">¥17,000</span>
+          <span class="value-prop-label">モニター価格から</span>
+          <p class="value-prop-desc">クラウドソーシング手数料ゼロの直接依頼。<br>同品質をリーズナブルに。</p>
+        </div>
+        <div class="value-prop-divider" aria-hidden="true"></div>
+        <div class="value-prop-item fade-in fade-in-delay-1">
+          <span class="value-prop-num">2回</span>
+          <span class="value-prop-label">修正無料</span>
+          <p class="value-prop-desc">仮公開後の修正を2回まで無料対応。<br>細部までこだわれます。</p>
+        </div>
+        <div class="value-prop-divider" aria-hidden="true"></div>
+        <div class="value-prop-item fade-in fade-in-delay-2">
+          <span class="value-prop-num">3営業日</span>
+          <span class="value-prop-label">以内にお返事</span>
+          <p class="value-prop-desc">相談・見積もりは3営業日以内に返信。<br>まずはお気軽にどうぞ。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== こんな方へ ===== -->
+    <section class="section target-section" id="target" aria-label="こんな方へ">
+      <div class="section-inner">
+        <span class="section-label fade-in">For you</span>
+        <h2 class="section-title fade-in fade-in-delay-1">こんな方へ</h2>
+        <p class="section-lead fade-in fade-in-delay-2">
+          「HPが欲しいけど、何から始めればいいかわからない」<br>
+          そんな方のそばで、一緒に考えながら作ります。
+        </p>
+
+        <div class="target-grid">
+          <div class="target-card fade-in fade-in-delay-1">
+            <img class="target-icon" src="assets/badges/num-01.png" alt="" aria-hidden="true" width="64" height="64">
+            <!-- 修正9: 「5件」を業種ラベルに変更 -->
+            <p class="target-card-title">サロン・美容室・カメラマン</p>
+            <p class="target-card-desc">
+              予約やお問い合わせを増やしたい。<br>
+              世界観を大切にしたデザインで、<br>
+              あなたの魅力を伝えます。
+            </p>
+          </div>
+
+          <div class="target-card fade-in fade-in-delay-2">
+            <img class="target-icon" src="assets/badges/num-02.png" alt="" aria-hidden="true" width="64" height="64">
+            <p class="target-card-title">工務店・士業・コンサル</p>
+            <p class="target-card-desc">
+              信頼感のある会社情報ページで<br>
+              新規顧客を獲得したい。<br>
+              清潔感と誠実さを大切に設計。
+            </p>
+          </div>
+
+          <div class="target-card fade-in fade-in-delay-3">
+            <img class="target-icon" src="assets/badges/num-03.png" alt="" aria-hidden="true" width="64" height="64">
+            <p class="target-card-title">VTuber・配信者・クリエイター</p>
+            <p class="target-card-desc">
+              活動拠点となるポートフォリオや<br>
+              ファンサイトをつくりたい方へ。<br>
+              個性を活かしたデザインに。
+            </p>
+          </div>
+
+          <div class="target-card fade-in fade-in-delay-4">
+            <img class="target-icon" src="assets/badges/num-04.png" alt="" aria-hidden="true" width="64" height="64">
+            <p class="target-card-title">新規サービスのLP・起業準備</p>
+            <p class="target-card-desc">
+              まず名刺がわりの1枚を持ちたい。<br>
+              サービス立ち上げに向けた<br>
+              スピーディな制作もお任せを。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- aiuego ブランド区切り線 -->
+    <div class="brand-divider" aria-hidden="true">
+      <img src="assets/deco/divider-aiuego.png" alt="" width="320" height="auto">
+    </div>
+
+    <!-- ===== 強み ===== -->
+    <section class="section strength-section" id="strength" aria-label="aiuegoの強み">
+      <div class="section-inner">
+        <span class="section-label fade-in">Our strengths</span>
+        <h2 class="section-title fade-in fade-in-delay-1">aiuego の<ruby>強<rt>つよ</rt></ruby>み</h2>
+        <p class="section-lead fade-in fade-in-delay-2">
+          低価格なのに、なぜ品質を保てるのか。<br>
+          その理由をていねいにお伝えします。
+        </p>
+
+        <div class="strength-list">
+          <div class="strength-item fade-in fade-in-delay-1">
+            <img class="strength-num" src="assets/badges/num-01.png" alt="" aria-hidden="true" width="52" height="52">
+            <div>
+              <p class="strength-body-title">インフラコストほぼ¥0で低価格を実現</p>
+              <p class="strength-body-desc">
+                法人インフラを活用することで、通常かかるサーバー・ドメイン費用をほぼゼロに圧縮。
+                その分を制作費の低価格化に還元しています。品質を落とさず、お求めやすい価格でご提供できる理由がここにあります。
+              </p>
+            </div>
+          </div>
+
+          <div class="strength-item fade-in fade-in-delay-2">
+            <img class="strength-num" src="assets/badges/num-02.png" alt="" aria-hidden="true" width="52" height="52">
+            <div>
+              <p class="strength-body-title">Coconala手数料22%をカットできる直接依頼</p>
+              <p class="strength-body-desc">
+                クラウドソーシング経由では22%の手数料が発生しますが、直接のご依頼なら手数料ゼロ。
+                同じ品質のHPをより安く、またはより充実した内容でお届けできます。
+              </p>
+            </div>
+          </div>
+
+          <!-- 修正7: 保守プラン訴求強化 -->
+          <div class="strength-item fade-in fade-in-delay-3">
+            <img class="strength-num" src="assets/badges/num-03.png" alt="" aria-hidden="true" width="52" height="52">
+            <div>
+              <p class="strength-body-title">月額保守で長くお付き合いできる関係性</p>
+              <p class="strength-body-desc">
+                HP制作は入口。月額¥1,500〜の保守プランで、更新・修正・セキュリティ対応を継続的にサポート。
+                作って終わりではなく、あなたの事業の成長とともに歩みます。
+              </p>
+              <!-- 継続収益型モデルの説明 -->
+              <div class="maintenance-model-note" aria-label="継続収益型モデル">
+                <span aria-hidden="true">🔁</span>
+                <span>継続収益型モデル — 制作後も月額でHP運用を丸ごとサポート。解約自由でリスクゼロ。</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="strength-item fade-in fade-in-delay-4">
+            <img class="strength-num" src="assets/badges/num-04.png" alt="" aria-hidden="true" width="52" height="52">
+            <div>
+              <!-- 修正9: 「実績5件」の具体数字を業種ラベルに変更 -->
+              <p class="strength-body-title">サロン・工務店・クリエイターなど多数の実績</p>
+              <p class="strength-body-desc">
+                サロン・美容室、工務店・士業、VTuber・配信者など多業種のHP制作を担当。
+                どんなデザインか、どんな仕上がりになるかを事前に確認してからご依頼いただけます。
+              </p>
+            </div>
+          </div>
+
+          <div class="strength-item fade-in fade-in-delay-5">
+            <img class="strength-num" src="assets/badges/num-05.png" alt="" aria-hidden="true" width="52" height="52">
+            <div>
+              <p class="strength-body-title">AI活用で高速・高品質・低コストを両立</p>
+              <p class="strength-body-desc">
+                最新のAIツールを積極的に活用することで、制作工数を削減。
+                浮いた時間をデザインの細部やヒアリングの丁寧さに充てることで、
+                高品質をお求めやすい価格でご提供しています。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 修正11: 実績ポートフォリオ ===== -->
+    <section class="section portfolio-section" id="portfolio" aria-label="実績ポートフォリオ">
+      <div class="section-inner">
+        <span class="section-label fade-in">Portfolio</span>
+        <h2 class="section-title fade-in fade-in-delay-1">実績ポートフォリオ</h2>
+        <p class="section-lead fade-in fade-in-delay-2">
+          業種別の制作事例をご覧ください。<br>
+          イメージに近い事例をもとにご相談いただけます。
+        </p>
+
+        <div class="portfolio-grid">
+          <div class="portfolio-card fade-in fade-in-delay-1" role="button" tabindex="0" onclick="openPortfolioModal('salon')" onkeydown="if(event.key==='Enter'||event.key===' ')openPortfolioModal('salon')" aria-label="サロン・美容室系ポートフォリオを見る" style="cursor:pointer;">
+            <div class="portfolio-thumb portfolio-thumb-salon" role="img" aria-label="サロン・美容室系 サムネイル">
+              <span class="portfolio-thumb-label">Salon / Beauty</span>
+            </div>
+            <div class="portfolio-card-body">
+              <span class="portfolio-card-genre">サロン・美容室系</span>
+              <p class="portfolio-card-title">ネイルサロン 予約ページ</p>
+              <p class="portfolio-card-desc">世界観を大切にした和モダンデザイン。予約フォームとSNS連携を実装。</p>
+              <span class="portfolio-card-more">詳細を見る →</span>
+            </div>
+          </div>
+
+          <div class="portfolio-card fade-in fade-in-delay-2" role="button" tabindex="0" onclick="openPortfolioModal('construction')" onkeydown="if(event.key==='Enter'||event.key===' ')openPortfolioModal('construction')" aria-label="工務店・士業系ポートフォリオを見る" style="cursor:pointer;">
+            <div class="portfolio-thumb portfolio-thumb-construction" role="img" aria-label="工務店・士業系 サムネイル">
+              <span class="portfolio-thumb-label">Construction / Law</span>
+            </div>
+            <div class="portfolio-card-body">
+              <span class="portfolio-card-genre">工務店・士業系</span>
+              <p class="portfolio-card-title">リフォーム会社 コーポレートサイト</p>
+              <p class="portfolio-card-desc">信頼感・清潔感を重視したデザイン。施工実績・スタッフ紹介を掲載。</p>
+              <span class="portfolio-card-more">詳細を見る →</span>
+            </div>
+          </div>
+
+          <div class="portfolio-card fade-in fade-in-delay-3" role="button" tabindex="0" onclick="openPortfolioModal('creator')" onkeydown="if(event.key==='Enter'||event.key===' ')openPortfolioModal('creator')" aria-label="クリエイター・配信者系ポートフォリオを見る" style="cursor:pointer;">
+            <div class="portfolio-thumb portfolio-thumb-creator" role="img" aria-label="クリエイター・配信者系 サムネイル">
+              <span class="portfolio-thumb-label">Creator / VTuber</span>
+            </div>
+            <div class="portfolio-card-body">
+              <span class="portfolio-card-genre">クリエイター・配信者系</span>
+              <p class="portfolio-card-title">VTuber ポートフォリオサイト</p>
+              <p class="portfolio-card-desc">個性的な世界観を表現。活動情報・グッズ・スケジュールを一元管理。</p>
+              <span class="portfolio-card-more">詳細を見る →</span>
+            </div>
+          </div>
+
+          <div class="portfolio-card fade-in fade-in-delay-4" role="button" tabindex="0" onclick="openPortfolioModal('lp')" onkeydown="if(event.key==='Enter'||event.key===' ')openPortfolioModal('lp')" aria-label="LP・新規サービス系ポートフォリオを見る" style="cursor:pointer;">
+            <div class="portfolio-thumb portfolio-thumb-lp" role="img" aria-label="LP・新規サービス系 サムネイル">
+              <span class="portfolio-thumb-label">LP / New Service</span>
+            </div>
+            <div class="portfolio-card-body">
+              <span class="portfolio-card-genre">LP・新規サービス系</span>
+              <p class="portfolio-card-title">オンライン講座 LP</p>
+              <p class="portfolio-card-desc">CVを意識したシングルページLP。問い合わせCTAを随所に配置。</p>
+              <span class="portfolio-card-more">詳細を見る →</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="portfolio-more fade-in fade-in-delay-5">
+          <a href="#contact" aria-label="ポートフォリオ詳細はお問い合わせから">詳しくはご相談時にお見せします →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 修正8: お客様の声 ===== -->
+    <section class="section testimonial-section" id="testimonials" aria-label="お客様の声">
+      <div class="section-inner">
+        <span class="section-label fade-in">Testimonials</span>
+        <h2 class="section-title fade-in fade-in-delay-1">お客様の声</h2>
+        <p class="section-lead fade-in fade-in-delay-2">
+          ご依頼いただいた方からの感想をご紹介します。
+        </p>
+
+        <!-- 仮文 - 実績が増えたら実際のレビューに差し替え -->
+        <div class="testimonial-grid">
+          <div class="testimonial-card fade-in fade-in-delay-1">
+            <span class="testimonial-stars" aria-label="星5つ">★★★★★</span>
+            <!-- 仮文 - 実際のレビューに差し替え予定 -->
+            <p class="testimonial-quote">
+              「ヒアリングがとても丁寧で、こちらの希望を的確に形にしていただけました。イメージ通りのHPができあがり、お客様からも好評です。」
+            </p>
+            <p class="testimonial-author">30代 フリーランスカメラマン</p>
+          </div>
+
+          <div class="testimonial-card fade-in fade-in-delay-2">
+            <span class="testimonial-stars" aria-label="星5つ">★★★★★</span>
+            <!-- 仮文 - 実際のレビューに差し替え予定 -->
+            <p class="testimonial-quote">
+              「ネットに不慣れな私でもわかりやすく説明してくれて安心でした。修正対応も早く、完成後のサポートも手厚くて助かっています。」
+            </p>
+            <p class="testimonial-author">40代 自営業・整体院オーナー</p>
+          </div>
+
+          <div class="testimonial-card fade-in fade-in-delay-3">
+            <span class="testimonial-stars" aria-label="星5つ">★★★★★</span>
+            <!-- 仮文 - 実際のレビューに差し替え予定 -->
+            <p class="testimonial-quote">
+              「予算が限られていたのですが、価格以上の仕上がりに驚きました。LINEでのやり取りも気軽でスピーディ。また依頼したいです！」
+            </p>
+            <p class="testimonial-author">20代 Vtuber・個人クリエイター</p>
+          </div>
+        </div>
+        <!-- 仮文ここまで -->
+
+        <p class="testimonial-permission fade-in fade-in-delay-4">
+          ※掲載はご本人の許可を得ています
+        </p>
+      </div>
+    </section>
+
+    <!-- ===== サービス・料金 ===== -->
+    <section class="section service-section" id="service" aria-label="サービスと料金">
+      <div class="section-inner">
+        <span class="section-label fade-in">Service &amp; Price</span>
+        <h2 class="section-title fade-in fade-in-delay-1">サービスと料金</h2>
+        <p class="section-lead fade-in fade-in-delay-2">
+          <strong>モニター価格</strong>とは、実績・口コミをいただく代わりに通常より安価にご提供するプランです。<br>
+          今だけの特別価格。まずはお気軽にご相談ください。
+        </p>
+
+        <!-- 修正6: 緊急性バナー -->
+        <div class="urgency-banner fade-in fade-in-delay-2" role="alert" aria-label="受付状況">
+          <p class="urgency-banner-text">
+            <strong>【モニター価格 受付状況】</strong> 現在 残り3件 のみ受付中。モニター価格は先着順・期間限定のため、お早めにご相談ください。
+          </p>
+        </div>
+
+        <div class="price-grid">
+          <div class="price-card featured fade-in fade-in-delay-1" aria-label="HP制作プラン">
+            <span class="price-badge">おすすめ</span>
+            <span class="price-card-label">Web Creation</span>
+            <p class="price-card-title">HP制作（直接依頼）</p>
+            <div class="price-main">
+              <span class="price-amount">¥17,000</span>
+              <span class="price-unit">〜（税込）</span>
+              <p class="price-note">モニター価格・残り3件・期間限定</p>
+            </div>
+            <ul class="price-features" aria-label="含まれる内容">
+              <li>ヒアリング〜公開まで一式</li>
+              <li>モバイル対応（スマホ・タブレット）</li>
+              <li>Google Analyticsの初期設定</li>
+              <li>修正2回まで含む</li>
+              <li>公開後1ヶ月のサポート</li>
+            </ul>
+          </div>
+
+          <div class="price-card fade-in fade-in-delay-2" aria-label="月額保守プラン">
+            <span class="price-card-label">Maintenance</span>
+            <p class="price-card-title">月額保守（Lightプラン）</p>
+            <div class="price-main">
+              <span class="price-amount">¥1,500</span>
+              <span class="price-unit">〜/月</span>
+              <p class="price-note">継続収益型・いつでも解約可</p>
+            </div>
+            <ul class="price-features" aria-label="含まれる内容">
+              <li>テキスト・画像の更新対応</li>
+              <li>セキュリティ・プラグイン更新</li>
+              <li>月1回の定期チェック</li>
+              <li>LINEでの問い合わせ対応</li>
+              <li>プラン変更・解約自由</li>
+            </ul>
+            <!-- 修正7: 継続収益型モデル説明 -->
+            <div class="maintenance-appeal" aria-label="保守プランの継続価値">
+              <strong>HPは公開後が本番。</strong> 定期的なメンテナンスでSEO・セキュリティを維持し、集客力をキープします。1ヶ月¥1,500から始められ、いつでも解約可能。リスクゼロでお試しいただけます。
+            </div>
+          </div>
+
+          <div class="price-card fade-in fade-in-delay-3" aria-label="アップセルサービス">
+            <span class="price-card-label">Add-on</span>
+            <p class="price-card-title">追加サービス</p>
+            <div class="price-main">
+              <span class="price-amount" style="font-size: 1.6rem;">ご相談</span>
+              <span class="price-unit">にて</span>
+              <p class="price-note">まずはお気軽に</p>
+            </div>
+            <ul class="price-features" aria-label="追加サービス一覧">
+              <li>公式LINEの構築・運用</li>
+              <li>名刺・ロゴデザイン</li>
+              <li>アイコン制作</li>
+              <li>SNSの初期設定・運用サポート</li>
+              <li>その他ご相談ください</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="coconala-note fade-in fade-in-delay-4" aria-label="Coconala経由との比較">
+          <div class="coconala-body">
+            <p>
+              Coconala経由でのご依頼の場合、<strong>¥20,000〜</strong>となります。
+              直接ご依頼いただくと、クラウドソーシングの手数料（約22%）が発生しない分、
+              <strong>同じ品質でよりリーズナブルに</strong>ご依頼いただけます。
+              まずはお気軽に直接ご相談ください。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 制作の流れ ===== -->
+    <section class="section flow-section" id="flow" aria-label="制作の流れ">
+      <div class="section-inner">
+        <span class="section-label fade-in">Process</span>
+        <h2 class="section-title fade-in fade-in-delay-1">制作の<ruby>流<rt>なが</rt></ruby>れ</h2>
+        <p class="section-lead fade-in fade-in-delay-2">
+          初めての方でも安心。ていねいにサポートします。
+        </p>
+
+        <div class="flow-steps" role="list">
+          <div class="flow-step fade-in fade-in-delay-1" role="listitem">
+            <img class="flow-step-num" src="assets/badges/num-01.png" alt="" aria-hidden="true" width="58" height="58">
+            <div class="flow-step-body">
+              <p class="flow-step-title">ヒアリング・ご相談</p>
+              <p class="flow-step-desc">
+                LINEまたはお問い合わせフォームからご連絡ください。
+                業種・ターゲット・ご希望のデザインイメージなどをヒアリングします。
+                この段階では費用は一切かかりません。
+              </p>
+            </div>
+          </div>
+
+          <div class="flow-step fade-in fade-in-delay-2" role="listitem">
+            <img class="flow-step-num" src="assets/badges/num-02.png" alt="" aria-hidden="true" width="58" height="58">
+            <div class="flow-step-body">
+              <p class="flow-step-title">お見積もり・ご契約</p>
+              <p class="flow-step-desc">
+                ヒアリング内容をもとにお見積もりをご提案。
+                内容をご確認いただいてからご契約いただきます。
+                わからないことがあればこの段階でなんでもご質問ください。
+              </p>
+            </div>
+          </div>
+
+          <div class="flow-step fade-in fade-in-delay-3" role="listitem">
+            <img class="flow-step-num" src="assets/badges/num-03.png" alt="" aria-hidden="true" width="58" height="58">
+            <div class="flow-step-body">
+              <p class="flow-step-title">デザイン・制作</p>
+              <p class="flow-step-desc">
+                ヒアリングをもとにデザインを作成します。
+                進捗はLINEでご確認いただけます。
+                疑問や気になる点はいつでもお知らせください。
+              </p>
+            </div>
+          </div>
+
+          <div class="flow-step fade-in fade-in-delay-4" role="listitem">
+            <img class="flow-step-num" src="assets/badges/num-04.png" alt="" aria-hidden="true" width="58" height="58">
+            <div class="flow-step-body">
+              <p class="flow-step-title">修正・確認</p>
+              <p class="flow-step-desc">
+                仮公開したページをご確認いただき、修正のご要望があればお知らせください。
+                2回まで無料で修正対応します。
+                細かい部分までていねいに調整します。
+              </p>
+            </div>
+          </div>
+
+          <div class="flow-step fade-in fade-in-delay-5" role="listitem">
+            <img class="flow-step-num" src="assets/badges/num-05.png" alt="" aria-hidden="true" width="58" height="58">
+            <div class="flow-step-body">
+              <p class="flow-step-title">公開・保守スタート</p>
+              <p class="flow-step-desc">
+                ご承認後、本番公開します。
+                公開後も月額保守プランで継続サポート。
+                HPを育てながら、事業の成長をともに支えます。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== よくある質問（修正10: 「相談だけでもOK？」を最初に移動） ===== -->
+    <section class="section faq-section" id="faq" aria-label="よくある質問">
+      <div class="section-inner">
+        <span class="section-label fade-in">FAQ</span>
+        <h2 class="section-title fade-in fade-in-delay-1">よくある質問</h2>
+        <div class="section-wave fade-in fade-in-delay-2"></div>
+
+        <div class="faq-list" role="list">
+
+          <!-- 修正10: 「相談だけでもOK？」を先頭に移動 -->
+          <div class="faq-item fade-in fade-in-delay-1" role="listitem">
+            <button class="faq-question" aria-expanded="false" onclick="toggleFaq(this)">
+              <span class="faq-q-text">相談だけでも大丈夫ですか？</span>
+              <span class="faq-icon" aria-hidden="true"></span>
+            </button>
+            <div class="faq-answer" role="region">
+              <p class="faq-a-text">
+                もちろんです！
+                「HPを作るか迷っている」「どんな内容にすればいいかわからない」
+                という段階からご相談いただけます。
+                相談は無料ですので、まずはLINEやInstagramのDMからお気軽にどうぞ。
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item fade-in fade-in-delay-1" role="listitem">
+            <button class="faq-question" aria-expanded="false" onclick="toggleFaq(this)">
+              <span class="faq-q-text">制作期間はどのくらいかかりますか？</span>
+              <span class="faq-icon" aria-hidden="true"></span>
+            </button>
+            <div class="faq-answer" role="region">
+              <p class="faq-a-text">
+                標準的なHP制作（3〜5ページ）の場合、ヒアリングから公開まで
+                <strong>2〜3週間</strong>が目安です。
+                内容のご確認や素材提供のタイミングにより前後することがあります。
+                お急ぎの場合はご相談ください。
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item fade-in fade-in-delay-1" role="listitem">
+            <button class="faq-question" aria-expanded="false" onclick="toggleFaq(this)">
+              <span class="faq-q-text">写真や素材がなくても大丈夫ですか？</span>
+              <span class="faq-icon" aria-hidden="true"></span>
+            </button>
+            <div class="faq-answer" role="region">
+              <p class="faq-a-text">
+                はい、大丈夫です。
+                フリー素材サイトからイメージに合った写真を選んで制作することもできますし、
+                CSSアートやグラデーションを活用したデザインにすることも可能です。
+                ご自身の写真をお持ちであれば、ぜひお送りください。
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item fade-in fade-in-delay-2" role="listitem">
+            <button class="faq-question" aria-expanded="false" onclick="toggleFaq(this)">
+              <span class="faq-q-text">¥17,000〜の「〜」は何が変わりますか？</span>
+              <span class="faq-icon" aria-hidden="true"></span>
+            </button>
+            <div class="faq-answer" role="region">
+              <p class="faq-a-text">
+                ページ数・機能・ご要望の複雑さによって変動します。
+                名刺がわりのシンプルな1〜2ページであれば¥17,000から対応可能です。
+                複数ページ・予約フォーム・多言語対応などのご希望がある場合は
+                追加費用が発生します。まずはご相談ください。
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item fade-in fade-in-delay-2" role="listitem">
+            <button class="faq-question" aria-expanded="false" onclick="toggleFaq(this)">
+              <span class="faq-q-text">月額保守プランは必須ですか？</span>
+              <span class="faq-icon" aria-hidden="true"></span>
+            </button>
+            <div class="faq-answer" role="region">
+              <p class="faq-a-text">
+                いいえ、必須ではありません。
+                HP制作のみのご依頼も承っています。
+                ただ、公開後の更新・セキュリティ対応・修正依頼を
+                スムーズにご対応するためのプランとしてご用意しています。
+                いつでも開始・解約が可能です。
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item fade-in fade-in-delay-3" role="listitem">
+            <button class="faq-question" aria-expanded="false" onclick="toggleFaq(this)">
+              <span class="faq-q-text">WordPressでの制作も対応していますか？</span>
+              <span class="faq-icon" aria-hidden="true"></span>
+            </button>
+            <div class="faq-answer" role="region">
+              <p class="faq-a-text">
+                はい、対応しています。
+                静的サイト（HTML/CSS/JS）、WordPress、どちらもご相談ください。
+                ご自身で更新したいかどうかや、将来的な拡張性のご希望に合わせて
+                最適な方法をご提案します。
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item fade-in fade-in-delay-3" role="listitem">
+            <button class="faq-question" aria-expanded="false" onclick="toggleFaq(this)">
+              <span class="faq-q-text">支払い方法はどのようになっていますか？</span>
+              <span class="faq-icon" aria-hidden="true"></span>
+            </button>
+            <div class="faq-answer" role="region">
+              <p class="faq-a-text">
+                銀行振込にて対応しています。
+                ご契約後に請求書をお送りします。
+                月額保守プランは毎月末払いです。
+                その他のお支払い方法についてはご相談ください。
+              </p>
+            </div>
+          </div>
+
+          <div class="faq-item fade-in fade-in-delay-4" role="listitem">
+            <button class="faq-question" aria-expanded="false" onclick="toggleFaq(this)">
+              <span class="faq-q-text">Coconalaでも依頼できますか？</span>
+              <span class="faq-icon" aria-hidden="true"></span>
+            </button>
+            <div class="faq-answer" role="region">
+              <p class="faq-a-text">
+                はい、Coconalaでも出品しています。
+                ただし、Coconala経由の場合は手数料の関係で¥20,000〜となります。
+                当サイトから直接ご依頼いただくと¥17,000〜と、
+                よりリーズナブルにご利用いただけます。
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== お問い合わせ ===== -->
+    <section class="section contact-section" id="contact" aria-label="お問い合わせ">
+      <div class="contact-inner">
+        <span class="section-label fade-in" style="text-align: center; display: block;">Contact</span>
+        <h2 class="section-title fade-in fade-in-delay-1" style="text-align: center;">まずは気軽に<br>ご相談ください</h2>
+        <p class="section-lead fade-in fade-in-delay-2" style="text-align: center; margin: 0 auto 48px;">
+          「作りたいけど迷っている」という段階からOK。<br>
+          LINEまたはフォームからお気軽にどうぞ。
+        </p>
+
+        <div class="contact-cta-block fade-in fade-in-delay-3">
+          <p class="contact-lead">
+            ヒアリングシートに答えるだけで、<br>
+            あなたにぴったりのご提案をお返しします。<br>
+            所要時間は約5分。費用はかかりません。
+          </p>
+          <div class="contact-btn-wrap">
+            <a href="#" class="btn-primary" aria-label="ヒアリングシートで相談する">ヒアリングシートで相談する</a>
+            <a href="#" class="btn-line" aria-label="LINEで相談する（準備中）">
+              <span aria-hidden="true">💬</span> LINEで相談する
+            </a>
+            <p class="contact-sub-note">お返事は通常3営業日以内にお届けします</p>
+          </div>
+        </div>
+
+        <div class="sns-links fade-in fade-in-delay-4" aria-label="SNSリンク">
+          <a href="#" class="sns-link" aria-label="Instagram @aiuego_web">
+            <span class="sns-icon" aria-hidden="true">📷</span>
+            @aiuego_web
+          </a>
+          <a href="#" class="sns-link" aria-label="X（旧Twitter）@aiuego_web">
+            <span class="sns-icon" aria-hidden="true">✕</span>
+            @aiuego_web
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== ポートフォリオモーダル ===== -->
+  <div class="portfolio-modal" id="portfolioModal" role="dialog" aria-modal="true" aria-labelledby="portfolioModalTitle">
+    <div class="portfolio-modal-backdrop" onclick="closePortfolioModal()"></div>
+    <div class="portfolio-modal-content">
+      <button class="portfolio-modal-close" onclick="closePortfolioModal()" aria-label="閉じる">&#x2715;</button>
+      <div class="portfolio-modal-thumb" id="portfolioModalThumb"></div>
+      <div class="portfolio-modal-body">
+        <span class="portfolio-card-genre" id="portfolioModalGenre"></span>
+        <h3 class="portfolio-modal-title" id="portfolioModalTitle"></h3>
+        <p class="portfolio-modal-desc" id="portfolioModalDesc"></p>
+        <div class="portfolio-modal-tags" id="portfolioModalTags"></div>
+        <div class="portfolio-modal-demo" id="portfolioModalDemo"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== フッター ===== -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-top">
+        <div>
+          <a href="#" class="footer-logo" aria-label="aiuego トップへ">aiuego</a>
+          <p class="footer-concept">
+            あいうえ<strong style="color: var(--color-deep);">ご</strong>から始まる、<br>
+            あなただけの ego を形に。<br>
+            個人事業主・フリーランスの方の<br>
+            ホームページ制作をお手伝いします。
+          </p>
+        </div>
+        <nav class="footer-sns" aria-label="SNSリンク">
+          <a href="#" class="footer-sns-icon" aria-label="Instagram">📷</a>
+          <a href="#" class="footer-sns-icon" aria-label="X（旧Twitter）">✕</a>
+          <a href="#" class="footer-sns-icon" aria-label="LINE公式">💬</a>
+        </nav>
+      </div>
+
+      <div class="footer-divider"></div>
+
+      <div class="footer-bottom">
+        <p class="footer-copyright">
+          <span aria-hidden="true">©</span> 2026 aiuego. All rights reserved.
+        </p>
+        <nav class="footer-nav" aria-label="フッターナビゲーション">
+          <a href="#target">こんな方へ</a>
+          <a href="#portfolio">実績</a>
+          <a href="#service">料金</a>
+          <a href="#faq">FAQ</a>
+          <a href="#contact">お問い合わせ</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== 修正5: スティッキーボトムバー ===== -->
+  <div class="sticky-cta" id="stickyCta" role="complementary" aria-label="お問い合わせバー">
+    <p class="sticky-cta-text">
+      <strong>HP制作のご相談はこちら</strong> — 相談・見積もり無料
+    </p>
+    <a href="#contact" class="sticky-cta-btn" aria-label="無料相談する">無料相談する</a>
+  </div>
+
+  <script>
+    // ===== ハンバーガーメニュー =====
+    function toggleMenu(btn) {
+      const isOpen = btn.classList.toggle('active');
+      btn.setAttribute('aria-expanded', isOpen);
+      const nav = document.getElementById('mobileNav');
+      nav.classList.toggle('open', isOpen);
+    }
+
+    function closeMobileNav() {
+      const btn = document.querySelector('.hamburger');
+      const nav = document.getElementById('mobileNav');
+      btn.classList.remove('active');
+      btn.setAttribute('aria-expanded', 'false');
+      nav.classList.remove('open');
+    }
+
+    // ===== FAQ アコーディオン =====
+    function toggleFaq(btn) {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.toggle('open');
+      btn.setAttribute('aria-expanded', isOpen);
+    }
+
+    // ===== IntersectionObserver フェードイン =====
+    const fadeEls = document.querySelectorAll('.fade-in');
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.12,
+        rootMargin: '0px 0px -40px 0px',
+      }
+    );
+
+    fadeEls.forEach((el) => observer.observe(el));
+
+    // ===== スティッキーボトムバー（200pxスクロール後に表示） =====
+    const stickyCta = document.getElementById('stickyCta');
+
+    window.addEventListener('scroll', function () {
+      if (window.scrollY > 200) {
+        stickyCta.classList.add('visible');
+      } else {
+        stickyCta.classList.remove('visible');
+      }
+    }, { passive: true });
+
+    // ナビリンクのスムーズスクロール（ヘッダーオフセット考慮）
+    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener('click', function (e) {
+        const hash = this.getAttribute('href');
+        if (hash === '#') return;
+        const target = document.querySelector(hash);
+        if (!target) return;
+        e.preventDefault();
+        const headerHeight = document.querySelector('.site-header').offsetHeight;
+        const top = target.getBoundingClientRect().top + window.scrollY - headerHeight - 16;
+        window.scrollTo({ top, behavior: 'smooth' });
+      });
+    });
+
+    // ===== ポートフォリオモーダル =====
+    const portfolioData = {
+      salon: {
+        genre: 'サロン・美容室系',
+        title: 'ネイルサロン 予約ページ',
+        desc: '世界観を大切にした和モダンデザイン。オーナーの人柄が伝わるトップビジュアルと、シンプルな予約フォームを実装。スマートフォンからの閲覧・予約を最重視した設計です。',
+        tags: ['和モダン', 'ピンク系', '予約フォーム', 'スマホ最適化', 'SNS連携'],
+        thumbClass: 'portfolio-thumb-salon',
+        demoUrl: null,
+        note: '※架空サンプル制作物'
+      },
+      construction: {
+        genre: '工務店・士業系',
+        title: 'リフォーム会社 コーポレートサイト',
+        desc: '信頼感と清潔感を重視したデザイン。施工事例を業種別に整理し、スタッフ紹介・お客様の声セクションを設けることで、依頼前の不安を解消する設計にしています。',
+        tags: ['シンプル', 'ネイビー×白', '施工実績', 'スタッフ紹介', 'お客様の声'],
+        thumbClass: 'portfolio-thumb-construction',
+        demoUrl: null,
+        note: '※架空サンプル制作物'
+      },
+      creator: {
+        genre: 'クリエイター・配信者系',
+        title: 'VTuber ポートフォリオサイト',
+        desc: '活動拠点となるポートフォリオページ。キャラクターの世界観をデザインに落とし込み、活動情報・スケジュール・グッズ情報を1ページで一元管理できる設計です。',
+        tags: ['ダーク系', 'ポップ', 'ポートフォリオ型', 'スケジュール', 'グッズ'],
+        thumbClass: 'portfolio-thumb-creator',
+        demoUrl: null,
+        note: '※架空サンプル制作物'
+      },
+      lp: {
+        genre: 'LP・新規サービス系',
+        title: 'オンライン講座 LP',
+        desc: 'コンバージョンを最大化するシングルページLP。ファーストビューで価値を伝え、FAQ・お客様の声でハードルを下げ、複数のCTAボタンで問い合わせにつなげる設計です。',
+        tags: ['LP', 'CV最適化', '複数CTA', 'お客様の声', 'FAQ'],
+        thumbClass: 'portfolio-thumb-lp',
+        demoUrl: null,
+        note: '※架空サンプル制作物'
+      }
+    };
+
+    function openPortfolioModal(id) {
+      const data = portfolioData[id];
+      if (!data) return;
+
+      // サムネイル
+      const thumb = document.getElementById('portfolioModalThumb');
+      thumb.className = 'portfolio-modal-thumb ' + data.thumbClass;
+
+      // テキスト
+      document.getElementById('portfolioModalGenre').textContent = data.genre;
+      document.getElementById('portfolioModalTitle').textContent = data.title;
+      document.getElementById('portfolioModalDesc').textContent = data.desc;
+
+      // タグ
+      const tagsEl = document.getElementById('portfolioModalTags');
+      tagsEl.innerHTML = data.tags.map(t => `<span class="portfolio-modal-tag">${t}</span>`).join('');
+
+      // デモリンクまたは準備中
+      const demoEl = document.getElementById('portfolioModalDemo');
+      if (data.demoUrl) {
+        demoEl.innerHTML = `<a href="${data.demoUrl}" target="_blank" rel="noopener" class="portfolio-modal-demo-btn">デモサイトを見る</a><span class="portfolio-modal-sample-note">${data.note}</span>`;
+      } else {
+        demoEl.innerHTML = `<span class="portfolio-modal-pending">デモサイト 近日公開予定</span><span class="portfolio-modal-sample-note">${data.note}</span>`;
+      }
+
+      // 表示
+      const modal = document.getElementById('portfolioModal');
+      modal.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      modal.querySelector('.portfolio-modal-close').focus();
+    }
+
+    function closePortfolioModal() {
+      const modal = document.getElementById('portfolioModal');
+      modal.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    // Escキーで閉じる
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closePortfolioModal();
+    });
+  </script>
+
+</body>
+</html>
