@@ -343,45 +343,24 @@
     .hero-inner {
       max-width: 1100px;
       margin: 0 auto;
-      padding: 80px 24px;
+      padding: 60px 24px 0;
       position: relative;
       z-index: 1;
       display: grid;
-      grid-template-columns: 1fr 280px;
-      gap: 40px;
-      align-items: center;
+      grid-template-columns: 1fr minmax(0, 480px);
+      gap: 32px;
+      align-items: end;
     }
 
     .hero-content {
-      /* テキスト側 */
+      padding-bottom: 48px;
     }
 
-    /* キャラクタープレースホルダー（画像準備後にimgタグに差し替え） */
-    .hero-character-placeholder {
-      width: 260px;
-      height: 380px;
-      border: 2px dashed var(--color-main);
-      border-radius: 20px;
-      background: rgba(214, 238, 245, 0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      position: relative;
-    }
-
-    .char-placeholder-inner {
-      text-align: center;
-      color: var(--color-deep);
-    }
-
-    .char-placeholder-inner p {
-      font-family: var(--font-sans);
-      font-size: 0.78rem;
-      font-weight: 300;
-      color: var(--color-deep);
-      line-height: 1.8;
-      margin-top: 8px;
+    .hero-character {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 8px 32px rgba(139,184,200,0.22));
     }
 
     /* ヒーロー最上部のサービスラベル */
@@ -647,8 +626,8 @@
       max-width: 1100px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      gap: 0;
     }
 
     .value-prop-item {
@@ -765,6 +744,7 @@
       height: 64px;
       display: block;
       margin-bottom: 18px;
+      object-fit: contain;
       mix-blend-mode: multiply;
     }
 
@@ -818,6 +798,7 @@
       width: 52px;
       height: 52px;
       flex-shrink: 0;
+      object-fit: contain;
       mix-blend-mode: multiply;
     }
 
@@ -1264,6 +1245,7 @@
       height: 58px;
       display: block;
       flex-shrink: 0;
+      object-fit: contain;
       position: relative;
       z-index: 1;
       mix-blend-mode: multiply;
@@ -1696,13 +1678,16 @@
         grid-template-columns: 1fr;
       }
 
-      .hero-character-placeholder {
+      .hero-character {
         display: none;
       }
 
       .value-prop-inner {
         grid-template-columns: 1fr;
         gap: 0;
+      }
+      .value-prop-section {
+        padding: 40px 16px;
       }
 
       .value-prop-divider {
@@ -1733,7 +1718,12 @@
       }
 
       .hero-inner {
-        padding: 60px 0;
+        padding: 60px 24px;
+        grid-template-columns: 1fr;
+      }
+
+      .hero-content {
+        padding-bottom: 60px;
       }
 
       .hero-deco-1 {
@@ -2085,13 +2075,11 @@
           </div>
         </div>
 
-        <!-- 修正4: キャラクタープレースホルダー（画像準備後にimgタグに差し替え） -->
-        <div class="hero-character-placeholder fade-in fade-in-delay-3" aria-hidden="true">
-          <!-- 水色髪・白和装のaiuegoキャラクター -->
-          <div class="char-placeholder-inner">
-            <p>キャラクター<br>準備中</p>
-          </div>
-        </div>
+        <!-- キャラクター -->
+        <img class="hero-character fade-in fade-in-delay-3"
+             src="assets/character.png"
+             alt="aiuego キャラクター — 水色髪・白和装でPCに向かうイラスト"
+             width="960" height="665" loading="eager">
       </div>
     </section>
 
@@ -2130,8 +2118,7 @@
 
         <div class="target-grid">
           <div class="target-card fade-in fade-in-delay-1">
-            <img class="target-icon" src="assets/badges/num-01.png" alt="" aria-hidden="true" width="64" height="64">
-            <!-- 修正9: 「5件」を業種ラベルに変更 -->
+            <img class="target-icon" src="assets/icons/icon-pen.png" alt="" aria-hidden="true" width="64" height="64">
             <p class="target-card-title">サロン・美容室・カメラマン</p>
             <p class="target-card-desc">
               予約やお問い合わせを増やしたい。<br>
@@ -2141,7 +2128,7 @@
           </div>
 
           <div class="target-card fade-in fade-in-delay-2">
-            <img class="target-icon" src="assets/badges/num-02.png" alt="" aria-hidden="true" width="64" height="64">
+            <img class="target-icon" src="assets/icons/icon-shield.png" alt="" aria-hidden="true" width="64" height="64">
             <p class="target-card-title">工務店・士業・コンサル</p>
             <p class="target-card-desc">
               信頼感のある会社情報ページで<br>
@@ -2151,7 +2138,7 @@
           </div>
 
           <div class="target-card fade-in fade-in-delay-3">
-            <img class="target-icon" src="assets/badges/num-03.png" alt="" aria-hidden="true" width="64" height="64">
+            <img class="target-icon" src="assets/icons/icon-chat.png" alt="" aria-hidden="true" width="64" height="64">
             <p class="target-card-title">VTuber・配信者・クリエイター</p>
             <p class="target-card-desc">
               活動拠点となるポートフォリオや<br>
@@ -2161,7 +2148,7 @@
           </div>
 
           <div class="target-card fade-in fade-in-delay-4">
-            <img class="target-icon" src="assets/badges/num-04.png" alt="" aria-hidden="true" width="64" height="64">
+            <img class="target-icon" src="assets/icons/icon-web.png" alt="" aria-hidden="true" width="64" height="64">
             <p class="target-card-title">新規サービスのLP・起業準備</p>
             <p class="target-card-desc">
               まず名刺がわりの1枚を持ちたい。<br>
