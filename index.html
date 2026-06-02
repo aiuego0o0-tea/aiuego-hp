@@ -347,13 +347,14 @@
       position: relative;
       z-index: 1;
       display: grid;
-      grid-template-columns: 1fr minmax(0, 480px);
-      gap: 32px;
+      grid-template-columns: 1fr minmax(0, 360px);
+      gap: 48px;
       align-items: end;
     }
 
     .hero-content {
       padding-bottom: 48px;
+      min-width: 0;
     }
 
     .hero-character {
@@ -389,9 +390,9 @@
 
     .hero-title {
       font-family: var(--font-mincho);
-      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-size: clamp(1.8rem, 3.2vw, 2.5rem);
       font-weight: 600;
-      line-height: 1.55;
+      line-height: 1.6;
       color: var(--color-text);
       margin-bottom: 28px;
       letter-spacing: 0.04em;
@@ -1672,10 +1673,14 @@
     @media (max-width: 900px) {
       .hero-inner {
         grid-template-columns: 1fr;
+        align-items: center;
+        padding-bottom: 0;
       }
 
       .hero-character {
-        display: none;
+        max-width: 460px;
+        margin: 0 auto;
+        display: block;
       }
 
       .value-prop-inner {
@@ -1714,12 +1719,18 @@
       }
 
       .hero-inner {
-        padding: 60px 24px;
+        padding: 60px 24px 0;
         grid-template-columns: 1fr;
       }
 
       .hero-content {
-        padding-bottom: 60px;
+        padding-bottom: 32px;
+      }
+
+      .hero-character {
+        max-width: 380px;
+        margin: 0 auto;
+        display: block;
       }
 
       .hero-deco-1 {
@@ -1779,6 +1790,10 @@
 
       .hero-title {
         font-size: 1.75rem;
+      }
+
+      .hero-character {
+        display: none;
       }
 
       .price-amount {
