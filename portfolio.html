@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>世界観ポートフォリオ | aiuego</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;600;700;900&family=Noto+Serif+JP:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Work+Sans:wght@300;400;500;600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { overflow-x: hidden; }
+    img { display: block; max-width: 100%; }
+
+    /* ===== BACK BUTTON ===== */
+    .back-btn {
+      position: fixed; bottom: 28px; left: 28px; z-index: 9999;
+      background: rgba(0,0,0,0.72); color: #fff;
+      padding: 10px 20px; border-radius: 100px;
+      font-size: 0.74rem; font-family: 'Montserrat', sans-serif;
+      text-decoration: none; letter-spacing: 0.08em;
+      backdrop-filter: blur(8px);
+      transition: background 0.2s;
+    }
+    .back-btn:hover { background: rgba(0,0,0,0.92); }
+
+    /* ===== SIDE NAV DOTS ===== */
+    .side-nav {
+      position: fixed; right: 22px; top: 50%; transform: translateY(-50%);
+      z-index: 1000;
+      display: flex; flex-direction: column; gap: 12px; align-items: center;
+    }
+    .side-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      cursor: pointer; border: none; padding: 0;
+      transition: all 0.3s;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.25);
+    }
+    .side-dot[data-s="intro"]     { background: rgba(180,180,180,0.4); }
+    .side-dot[data-s="corporate"] { background: rgba(212,175,55,0.4); }
+    .side-dot[data-s="creator"]   { background: rgba(155,89,182,0.4); }
+    .side-dot[data-s="fire"]      { background: rgba(255,87,51,0.4); }
+    .side-dot[data-s="wafuu"]     { background: rgba(122,144,51,0.4); }
+    .side-dot.active              { width: 10px; height: 10px; }
+    .side-dot[data-s="intro"].active     { background: #ccc; }
+    .side-dot[data-s="corporate"].active { background: #D4AF37; }
+    .side-dot[data-s="creator"].active   { background: #9B59B6; }
+    .side-dot[data-s="fire"].active      { background: #FF5733; }
+    .side-dot[data-s="wafuu"].active     { background: #7A9033; }
+    @media (max-width: 768px) { .side-nav { display: none; } }
+
+    /* ===== SECTION LABEL ===== */
+    .section-label {
+      display: inline-block;
+      padding: 5px 14px;
+      font-size: 0.66rem; letter-spacing: 0.22em;
+      text-transform: uppercase; margin-bottom: 52px;
+    }
+
+    /* ============================================================ */
+    /* INTRO                                                         */
+    /* ============================================================ */
+    #intro {
+      min-height: 100vh; background: #0A0A0A;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 48px 24px;
+      position: relative; overflow: hidden;
+    }
+    #intro::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 40%, rgba(100,100,120,0.15) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .intro-eyebrow {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.68rem; letter-spacing: 0.45em;
+      color: rgba(255,255,255,0.35); margin-bottom: 28px;
+      text-transform: uppercase;
+    }
+    .intro-title {
+      font-family: 'Lora', serif;
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      color: #fff; line-height: 1.25; margin-bottom: 20px;
+    }
+    .intro-sub {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.88rem; color: rgba(255,255,255,0.42);
+      line-height: 1.9; max-width: 420px; margin-bottom: 48px;
+    }
+    .intro-chips {
+      display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+      margin-bottom: 56px;
+    }
+    .intro-chip {
+      padding: 5px 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.68rem; letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.35);
+    }
+    .intro-scroll {
+      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: rgba(255,255,255,0.25);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.62rem; letter-spacing: 0.35em;
+      animation: bob 2.2s ease-in-out infinite;
+    }
+    @keyframes bob {
+      0%,100% { transform: translateX(-50%) translateY(0); opacity:.3; }
+      50%      { transform: translateX(-50%) translateY(7px); opacity:.7; }
+    }
+
+    /* ============================================================ */
+    /* SECTION 1 — CORPORATE  Navy × Gold                           */
+    /* ============================================================ */
+    #corporate {
+      background: #001F5C; color: #fff;
+      padding: 96px 64px 80px;
+      font-family: 'Montserrat', sans-serif;
+    }
+    .s1-label {
+      border: 1px solid rgba(212,175,55,0.35);
+      color: rgba(212,175,55,0.75);
+    }
+    .s1-header {
+      display: grid; grid-template-columns: auto 1fr; gap: 48px;
+      align-items: end; margin-bottom: 48px;
+    }
+    .s1-brand {
+      font-family: 'Lora', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.2; color: #fff;
+    }
+    .s1-brand em { font-style: normal; color: #D4AF37; }
+    .s1-tagline {
+      font-size: 0.82rem; color: rgba(255,255,255,0.45);
+      line-height: 1.9; max-width: 340px;
+    }
+    /* 2-col image grid: left tall, right 2 stacked */
+    .s1-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      grid-template-rows: 310px 210px;
+      gap: 3px;
+    }
+    .s1-main { grid-row: span 2; overflow: hidden; }
+    .s1-cell { overflow: hidden; }
+    .s1-img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(0.82) saturate(0.85);
+      transition: filter 0.5s, transform 0.6s;
+    }
+    .s1-main:hover .s1-img,
+    .s1-cell:hover .s1-img { filter: brightness(0.95) saturate(1); transform: scale(1.04); }
+    .s1-meta {
+      display: flex; gap: 40px;
+      border-top: 1px solid rgba(212,175,55,0.2);
+      padding-top: 28px; margin-top: 36px;
+    }
+    .s1-meta-label { font-size: 0.66rem; letter-spacing: 0.18em; color: #D4AF37; margin-bottom: 3px; }
+    .s1-meta-val   { font-size: 1.3rem; font-weight: 700; }
+
+    @media (max-width: 900px) {
+      #corporate { padding: 64px 28px 60px; }
+      .s1-header { grid-template-columns: 1fr; gap: 16px; }
+      .s1-grid { grid-template-columns: 1fr; grid-template-rows: 220px 160px 160px; }
+      .s1-main { grid-row: span 1; }
+    }
+
+    /* ============================================================ */
+    /* SECTION 2 — CREATOR  Near-black × Cream × Purple             */
+    /* ============================================================ */
+    #creator {
+      background: #0D0D0D; color: #F5F5F5;
+      padding: 96px 64px 80px;
+    }
+    .s2-label {
+      font-family: 'Work Sans', sans-serif;
+      border: 1px solid rgba(155,89,182,0.3);
+      color: rgba(195,155,211,0.8);
+    }
+    .s2-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 9vw, 7rem);
+      color: #F5F5F5; line-height: 0.88; margin-bottom: 12px;
+    }
+    .s2-brand em { font-style: italic; color: #E8D4B8; }
+    .s2-byline {
+      font-family: 'Work Sans', sans-serif;
+      font-size: 0.8rem; letter-spacing: 0.2em;
+      color: rgba(245,245,245,0.35); margin-bottom: 52px;
+    }
+    /* editorial grid: left portrait, right 2 stacked landscape */
+    .s2-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.55fr;
+      grid-template-rows: 520px;
+      gap: 3px;
+    }
+    .s2-left { overflow: hidden; }
+    .s2-right {
+      display: grid; grid-template-rows: 1fr 1fr; gap: 3px;
+    }
+    .s2-right-cell { overflow: hidden; }
+    .s2-img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: grayscale(18%) brightness(0.82);
+      transition: filter 0.55s, transform 0.65s;
+    }
+    .s2-left:hover .s2-img,
+    .s2-right-cell:hover .s2-img { filter: grayscale(0%) brightness(0.95); transform: scale(1.05); }
+    .s2-rule {
+      margin-top: 30px;
+      display: flex; align-items: center; gap: 18px;
+    }
+    .s2-rule-line { flex: 1; height: 1px; background: rgba(232,212,184,0.12); }
+    .s2-rule-text {
+      font-family: 'Playfair Display', serif;
+      font-style: italic; font-size: 0.88rem; color: #E8D4B8;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 900px) {
+      #creator { padding: 64px 28px 60px; }
+      .s2-grid { grid-template-columns: 1fr; grid-template-rows: 240px; }
+      .s2-right { grid-template-columns: 1fr 1fr; grid-template-rows: 200px; }
+    }
+
+    /* ============================================================ */
+    /* SECTION 3 — FIRE  Dark × Orange × Gold                       */
+    /* ============================================================ */
+    #fire {
+      background: #111111; color: #fff;
+      padding: 96px 64px 80px;
+      font-family: 'Inter', sans-serif;
+      position: relative; overflow: hidden;
+    }
+    #fire::before {
+      content: ''; position: absolute;
+      top: -20%; right: -10%; width: 55%; height: 140%;
+      background: radial-gradient(ellipse at 60% 40%, rgba(255,87,51,0.09) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .s3-label {
+      font-family: 'Inter', sans-serif;
+      border: 1px solid rgba(255,87,51,0.35);
+      color: rgba(255,130,100,0.85);
+    }
+    .s3-brand {
+      font-family: 'Montserrat', sans-serif; font-weight: 900;
+      font-size: clamp(3.5rem, 11vw, 9rem);
+      line-height: 0.82; text-transform: uppercase; letter-spacing: -0.02em;
+      color: #fff; margin-bottom: 16px;
+    }
+    .s3-brand-accent { color: #FF5733; }
+    .s3-bar {
+      display: flex; align-items: center; gap: 16px; margin-bottom: 52px;
+    }
+    .s3-bar-line { width: 56px; height: 2px; background: #FF5733; flex-shrink: 0; }
+    .s3-bar-text {
+      font-size: 0.78rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: rgba(255,255,255,0.38);
+    }
+    /* wide + narrow grid */
+    .s3-grid {
+      display: grid;
+      grid-template-columns: 1.7fr 1fr;
+      gap: 3px;
+    }
+    .s3-cell { position: relative; overflow: hidden; }
+    .s3-img {
+      width: 100%; height: 360px; object-fit: cover;
+      filter: brightness(0.72) saturate(1.15);
+      transition: filter 0.45s, transform 0.6s;
+    }
+    .s3-cell:hover .s3-img { filter: brightness(0.88) saturate(1.35); transform: scale(1.04); }
+    .s3-img-tag {
+      position: absolute; bottom: 14px; left: 14px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700; font-size: 0.68rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: #FF5733;
+    }
+    /* orange diagonal stripe decoration */
+    .s3-stripe {
+      position: absolute; top: 0; right: 0; bottom: 0; width: 4px;
+      background: linear-gradient(to bottom, #FF5733, #FFD700);
+    }
+    .s3-stats {
+      display: flex; margin-top: 36px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding-top: 28px;
+    }
+    .s3-stat { flex: 1; padding-right: 24px; border-right: 1px solid rgba(255,255,255,0.07); }
+    .s3-stat:last-child { border-right: none; padding-right: 0; padding-left: 24px; }
+    .s3-stat-num {
+      font-family: 'Montserrat', sans-serif; font-weight: 900;
+      font-size: 1.9rem; color: #FF5733; line-height: 1;
+    }
+    .s3-stat-lbl { font-size: 0.68rem; letter-spacing: 0.1em; color: rgba(255,255,255,0.35); margin-top: 4px; }
+
+    @media (max-width: 900px) {
+      #fire { padding: 64px 28px 60px; }
+      .s3-grid { grid-template-columns: 1fr; }
+      .s3-img { height: 220px; }
+      .s3-stats { flex-wrap: wrap; gap: 16px; }
+      .s3-stat { flex: 0 0 45%; border-right: none; padding: 0; }
+    }
+
+    /* ============================================================ */
+    /* SECTION 4 — WAFUU  Cream × Matcha × Sakura                   */
+    /* ============================================================ */
+    #wafuu {
+      background: #F5F0E8; color: #2C2C2C;
+      padding: 96px 64px 96px;
+    }
+    .s4-label {
+      font-family: 'Noto Serif JP', serif;
+      border: 1px solid rgba(122,144,51,0.35);
+      color: rgba(122,144,51,0.85);
+    }
+    .s4-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 52px; gap: 32px;
+    }
+    .s4-brand {
+      font-family: 'Noto Serif JP', serif; font-weight: 300;
+      font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+      color: #2C2C2C; letter-spacing: 0.18em; line-height: 1.15;
+    }
+    .s4-brand small {
+      display: block; font-size: 0.38em;
+      letter-spacing: 0.35em; color: #7A9033; margin-top: 10px;
+      font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 400;
+    }
+    .s4-poem {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem; font-style: italic;
+      color: rgba(44,44,44,0.5); line-height: 2.1;
+      text-align: right; max-width: 260px;
+    }
+    /* left tall + right 2 stacked */
+    .s4-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      grid-template-rows: 290px 200px;
+      gap: 3px;
+    }
+    .s4-main { grid-row: span 2; overflow: hidden; }
+    .s4-cell { overflow: hidden; }
+    .s4-img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(0.93) saturate(0.82);
+      transition: filter 0.5s, transform 0.65s;
+    }
+    .s4-main:hover .s4-img,
+    .s4-cell:hover .s4-img { filter: brightness(1) saturate(1); transform: scale(1.04); }
+    .s4-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 32px;
+      border-top: 1px solid rgba(122,144,51,0.18);
+      padding-top: 28px; margin-top: 36px;
+    }
+    .s4-kigo {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-size: 1rem;
+      color: rgba(44,44,44,0.4); line-height: 1.8;
+    }
+    .s4-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .s4-tag {
+      padding: 4px 12px;
+      border: 1px solid rgba(122,144,51,0.3);
+      font-family: 'Noto Serif JP', serif;
+      font-size: 0.7rem; color: #7A9033; letter-spacing: 0.05em;
+    }
+
+    @media (max-width: 900px) {
+      #wafuu { padding: 64px 28px 80px; }
+      .s4-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .s4-poem { text-align: left; }
+      .s4-grid { grid-template-columns: 1fr; grid-template-rows: 220px 160px 160px; }
+      .s4-main { grid-row: span 1; }
+      .s4-footer { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="index.html" class="back-btn">← aiuego HP へ戻る</a>
+
+  <nav class="side-nav" aria-label="セクション移動">
+    <button class="side-dot active" data-s="intro"     onclick="go('intro')"     aria-label="はじめに"></button>
+    <button class="side-dot"        data-s="corporate" onclick="go('corporate')" aria-label="コーポレート"></button>
+    <button class="side-dot"        data-s="creator"   onclick="go('creator')"   aria-label="クリエイター"></button>
+    <button class="side-dot"        data-s="fire"      onclick="go('fire')"      aria-label="フィットネス"></button>
+    <button class="side-dot"        data-s="wafuu"     onclick="go('wafuu')"     aria-label="和風"></button>
+  </nav>
+
+  <!-- ================================================================ -->
+  <!-- INTRO                                                              -->
+  <!-- ================================================================ -->
+  <section id="intro">
+    <p class="intro-eyebrow">aiuego — Web制作</p>
+    <h1 class="intro-title">世界観<br>ポートフォリオ</h1>
+    <p class="intro-sub">4つの業界、4つのデザイン。<br>スクロールして「この感じ好き！」を見つけてください。</p>
+    <div class="intro-chips">
+      <span class="intro-chip">コーポレート</span>
+      <span class="intro-chip">クリエイター</span>
+      <span class="intro-chip">フィットネス</span>
+      <span class="intro-chip">和風・飲食</span>
+    </div>
+    <div class="intro-scroll">
+      <span>SCROLL</span>
+      <span>↓</span>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <!-- SECTION 1 — CORPORATE  Navy × Gold                                -->
+  <!-- ================================================================ -->
+  <section id="corporate">
+    <span class="section-label s1-label">コーポレート / 士業・コンサル</span>
+    <div class="s1-header">
+      <h2 class="s1-brand">NEXUS<br><em>Advisory</em><br>Group</h2>
+      <p class="s1-tagline">経営の羅針盤。確かな戦略で、企業の未来を切り拓く。<br>誠実と信頼を軸に、クライアントと歩む専門家集団。</p>
+    </div>
+    <div class="s1-grid">
+      <div class="s1-main">
+        <img class="s1-img"
+          src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=900&q=80"
+          alt="コンサルティングの場" loading="lazy">
+      </div>
+      <div class="s1-cell">
+        <img class="s1-img"
+          src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=700&q=80"
+          alt="データ分析" loading="lazy">
+      </div>
+      <div class="s1-cell">
+        <img class="s1-img"
+          src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=700&q=80"
+          alt="チームミーティング" loading="lazy">
+      </div>
+    </div>
+    <div class="s1-meta">
+      <div>
+        <p class="s1-meta-label">INDUSTRY</p>
+        <p class="s1-meta-val" style="font-size:0.95rem;font-weight:600;">士業・コンサル・法人</p>
+      </div>
+      <div>
+        <p class="s1-meta-label">STYLE</p>
+        <p class="s1-meta-val" style="font-size:0.95rem;font-weight:600;">Navy × Gold — 信頼・格調</p>
+      </div>
+      <div>
+        <p class="s1-meta-label">FONT</p>
+        <p class="s1-meta-val" style="font-size:0.95rem;font-weight:600;">Lora + Montserrat</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <!-- SECTION 2 — CREATOR  Near-black × Cream × Purple                 -->
+  <!-- ================================================================ -->
+  <section id="creator">
+    <span class="section-label s2-label">クリエイター / 写真・アート・映像</span>
+    <h2 class="s2-brand">SOTA<br><em>Photography</em></h2>
+    <p class="s2-byline">Visual Storyteller · Tokyo · 2019–</p>
+    <div class="s2-grid">
+      <div class="s2-left">
+        <img class="s2-img"
+          src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=700&q=80"
+          alt="ポートレート撮影" loading="lazy">
+      </div>
+      <div class="s2-right">
+        <div class="s2-right-cell">
+          <img class="s2-img"
+            src="https://images.unsplash.com/photo-1500964757637-c85e8a162699?w=900&q=80"
+            alt="ドラマチックな風景" loading="lazy">
+        </div>
+        <div class="s2-right-cell">
+          <img class="s2-img"
+            src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=700&q=80"
+            alt="カメラ機材" loading="lazy">
+        </div>
+      </div>
+    </div>
+    <div class="s2-rule">
+      <div class="s2-rule-line"></div>
+      <span class="s2-rule-text">Dark × Cream × Purple — 感性・表現・奥行き</span>
+      <div class="s2-rule-line"></div>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <!-- SECTION 3 — FIRE  Dark × Orange × Gold                           -->
+  <!-- ================================================================ -->
+  <section id="fire">
+    <span class="section-label s3-label">フィットネス / スポーツ・エネルギー</span>
+    <h2 class="s3-brand">BLAZE<br><span class="s3-brand-accent">FITNESS</span></h2>
+    <div class="s3-bar">
+      <div class="s3-bar-line"></div>
+      <p class="s3-bar-text">限界を超えろ。自分を燃やせ。</p>
+    </div>
+    <div class="s3-grid">
+      <div class="s3-cell">
+        <img class="s3-img"
+          src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1000&q=80"
+          alt="ジムトレーニングフロア" loading="lazy">
+        <span class="s3-img-tag">Training Floor</span>
+        <div class="s3-stripe"></div>
+      </div>
+      <div class="s3-cell">
+        <img class="s3-img"
+          src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=700&q=80"
+          alt="ワークアウト" loading="lazy">
+        <span class="s3-img-tag">Push Limits</span>
+      </div>
+    </div>
+    <div class="s3-stats">
+      <div class="s3-stat">
+        <div class="s3-stat-num">5AM</div>
+        <div class="s3-stat-lbl">OPEN</div>
+      </div>
+      <div class="s3-stat">
+        <div class="s3-stat-num">300+</div>
+        <div class="s3-stat-lbl">MEMBERS</div>
+      </div>
+      <div class="s3-stat" style="border-right:none;">
+        <div class="s3-stat-num" style="font-size:1rem;color:#fff;font-weight:600;">Dark × <span style="color:#FF5733;">Orange</span></div>
+        <div class="s3-stat-lbl">エネルギー・行動・強さ</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <!-- SECTION 4 — WAFUU  Cream × Matcha × Sakura                       -->
+  <!-- ================================================================ -->
+  <section id="wafuu">
+    <span class="section-label s4-label">和風・飲食 / 和菓子・伝統文化</span>
+    <div class="s4-header">
+      <h2 class="s4-brand">
+        花結び
+        <small>HANAYUI WAGASHI — Since 1924</small>
+      </h2>
+      <p class="s4-poem">四季の移ろいを<br>ひと菓子に宿して。<br>ていねいな時間の流れの中で。</p>
+    </div>
+    <div class="s4-grid">
+      <div class="s4-main">
+        <img class="s4-img"
+          src="https://images.unsplash.com/photo-1753009712810-3f72c3f72548?w=700&q=80"
+          alt="抹茶を点てる" loading="lazy">
+      </div>
+      <div class="s4-cell">
+        <img class="s4-img"
+          src="https://images.unsplash.com/photo-1764512679985-ad1eb8d58cc4?w=700&q=80"
+          alt="抹茶と茶碗" loading="lazy">
+      </div>
+      <div class="s4-cell">
+        <img class="s4-img"
+          src="https://images.unsplash.com/photo-1556639118-e7d828188ff9?w=700&q=80"
+          alt="桜並木の水路" loading="lazy">
+      </div>
+    </div>
+    <div class="s4-footer">
+      <p class="s4-kigo">"和の美意識は、余白の中にある。"<br>目に美しく、心に静かなウェブを。</p>
+      <div class="s4-tags">
+        <span class="s4-tag">抹茶グリーン</span>
+        <span class="s4-tag">桜ピンク</span>
+        <span class="s4-tag">Cream × Matcha</span>
+        <span class="s4-tag">Noto Serif JP</span>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    function go(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
+
+    const sections = ['intro','corporate','creator','fire','wafuu'];
+    const dots = Object.fromEntries(sections.map(id => [
+      id, document.querySelector(`.side-dot[data-s="${id}"]`)
+    ]));
+
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        sections.forEach(id => dots[id]?.classList.remove('active'));
+        dots[e.target.id]?.classList.add('active');
+      });
+    }, { threshold: 0.45 });
+
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) obs.observe(el);
+    });
+  </script>
+</body>
+</html>

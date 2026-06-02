@@ -347,13 +347,13 @@
       position: relative;
       z-index: 1;
       display: grid;
-      grid-template-columns: 1fr minmax(0, 360px);
-      gap: 48px;
-      align-items: end;
+      grid-template-columns: 1fr minmax(0, 560px);
+      gap: 32px;
+      align-items: center;
     }
 
     .hero-content {
-      padding-bottom: 48px;
+      padding-bottom: 16px;
       min-width: 0;
     }
 
@@ -961,6 +961,28 @@
     .portfolio-more a:hover {
       opacity: 0.70;
     }
+
+    .portfolio-single-wrap {
+      display: flex; justify-content: center; margin-top: 48px;
+    }
+    .portfolio-single-btn {
+      display: inline-flex; align-items: center; gap: 16px;
+      background: var(--color-deep);
+      color: #fff; text-decoration: none;
+      padding: 18px 40px; border-radius: 4px;
+      font-family: var(--font-sans);
+      font-size: 0.95rem; font-weight: 500; letter-spacing: 0.06em;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .portfolio-single-btn:hover { opacity: 0.85; transform: translateY(-2px); }
+    .portfolio-single-swatches {
+      display: flex; gap: 4px;
+    }
+    .portfolio-single-swatches span {
+      width: 10px; height: 10px; border-radius: 50%;
+      display: inline-block; flex-shrink: 0;
+    }
+    .portfolio-single-arrow { font-size: 1rem; }
 
     /* ===== お客様の声 ===== */
     .testimonial-section {
@@ -2258,62 +2280,21 @@
         <span class="section-label fade-in">Portfolio</span>
         <h2 class="section-title fade-in fade-in-delay-1">実績ポートフォリオ</h2>
         <p class="section-lead fade-in fade-in-delay-2">
-          業種別の制作事例をご覧ください。<br>
-          イメージに近い事例をもとにご相談いただけます。
+          コーポレート・クリエイター・フィットネス・和風。<br>
+          4つの世界観から「この感じ好き！」を見つけてください。
         </p>
 
-        <div class="portfolio-grid">
-          <div class="portfolio-card fade-in fade-in-delay-1" role="button" tabindex="0" onclick="openPortfolioModal('salon')" onkeydown="if(event.key==='Enter'||event.key===' ')openPortfolioModal('salon')" aria-label="サロン・美容室系ポートフォリオを見る" style="cursor:pointer;">
-            <div class="portfolio-thumb portfolio-thumb-salon" role="img" aria-label="サロン・美容室系 サムネイル">
-              <span class="portfolio-thumb-label">Salon / Beauty</span>
-            </div>
-            <div class="portfolio-card-body">
-              <span class="portfolio-card-genre">サロン・美容室系</span>
-              <p class="portfolio-card-title">ネイルサロン 予約ページ</p>
-              <p class="portfolio-card-desc">世界観を大切にした和モダンデザイン。予約フォームとSNS連携を実装。</p>
-              <span class="portfolio-card-more">詳細を見る →</span>
-            </div>
-          </div>
-
-          <div class="portfolio-card fade-in fade-in-delay-2" role="button" tabindex="0" onclick="openPortfolioModal('construction')" onkeydown="if(event.key==='Enter'||event.key===' ')openPortfolioModal('construction')" aria-label="工務店・士業系ポートフォリオを見る" style="cursor:pointer;">
-            <div class="portfolio-thumb portfolio-thumb-construction" role="img" aria-label="工務店・士業系 サムネイル">
-              <span class="portfolio-thumb-label">Construction / Law</span>
-            </div>
-            <div class="portfolio-card-body">
-              <span class="portfolio-card-genre">工務店・士業系</span>
-              <p class="portfolio-card-title">リフォーム会社 コーポレートサイト</p>
-              <p class="portfolio-card-desc">信頼感・清潔感を重視したデザイン。施工実績・スタッフ紹介を掲載。</p>
-              <span class="portfolio-card-more">詳細を見る →</span>
-            </div>
-          </div>
-
-          <div class="portfolio-card fade-in fade-in-delay-3" role="button" tabindex="0" onclick="openPortfolioModal('creator')" onkeydown="if(event.key==='Enter'||event.key===' ')openPortfolioModal('creator')" aria-label="クリエイター・配信者系ポートフォリオを見る" style="cursor:pointer;">
-            <div class="portfolio-thumb portfolio-thumb-creator" role="img" aria-label="クリエイター・配信者系 サムネイル">
-              <span class="portfolio-thumb-label">Creator / VTuber</span>
-            </div>
-            <div class="portfolio-card-body">
-              <span class="portfolio-card-genre">クリエイター・配信者系</span>
-              <p class="portfolio-card-title">VTuber ポートフォリオサイト</p>
-              <p class="portfolio-card-desc">個性的な世界観を表現。活動情報・グッズ・スケジュールを一元管理。</p>
-              <span class="portfolio-card-more">詳細を見る →</span>
-            </div>
-          </div>
-
-          <div class="portfolio-card fade-in fade-in-delay-4" role="button" tabindex="0" onclick="openPortfolioModal('lp')" onkeydown="if(event.key==='Enter'||event.key===' ')openPortfolioModal('lp')" aria-label="LP・新規サービス系ポートフォリオを見る" style="cursor:pointer;">
-            <div class="portfolio-thumb portfolio-thumb-lp" role="img" aria-label="LP・新規サービス系 サムネイル">
-              <span class="portfolio-thumb-label">LP / New Service</span>
-            </div>
-            <div class="portfolio-card-body">
-              <span class="portfolio-card-genre">LP・新規サービス系</span>
-              <p class="portfolio-card-title">オンライン講座 LP</p>
-              <p class="portfolio-card-desc">CVを意識したシングルページLP。問い合わせCTAを随所に配置。</p>
-              <span class="portfolio-card-more">詳細を見る →</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="portfolio-more fade-in fade-in-delay-5">
-          <a href="#contact" aria-label="ポートフォリオ詳細はお問い合わせから">詳しくはご相談時にお見せします →</a>
+        <div class="portfolio-single-wrap fade-in fade-in-delay-3">
+          <a href="portfolio.html" class="portfolio-single-btn" aria-label="世界観ポートフォリオを見る">
+            <span class="portfolio-single-swatches" aria-hidden="true">
+              <span style="background:#001F5C;"></span>
+              <span style="background:#0D0D0D;"></span>
+              <span style="background:#FF5733;"></span>
+              <span style="background:#7A9033;"></span>
+            </span>
+            デザインサンプルを見る
+            <span class="portfolio-single-arrow">→</span>
+          </a>
         </div>
       </div>
     </section>
